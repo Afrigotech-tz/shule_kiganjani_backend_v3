@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\Role;
+use App\Models\User;
 use App\Repositories\Fees\FeesInterface;
 use App\Repositories\Notification\NotificationInterface;
 use App\Repositories\User\UserInterface;
@@ -11,30 +12,32 @@ use App\Services\BootstrapTableService;
 use App\Services\CachingService;
 use App\Services\ResponseService;
 use App\Services\SessionYearsTrackingsService;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
+use App\Services\SmService;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use DB;
 use Throwable;
 
 class NotificationController extends Controller
 {
-
     private NotificationInterface $notification;
     private CachingService $cache;
     private UserInterface $user;
     private FeesInterface $fees;
     private SessionYearsTrackingsService $sessionYearsTrackingsService;
+    protected $smService;
 
-    public function __construct(NotificationInterface $notification, CachingService $cache, UserInterface $user, FeesInterface $fees, SessionYearsTrackingsService $sessionYearsTrackingsService)
+    public function __construct(NotificationInterface $notification, CachingService $cache, UserInterface $user, FeesInterface $fees, SessionYearsTrackingsService $sessionYearsTrackingsService, SmService $smService)
     {
         $this->notification = $notification;
         $this->cache = $cache;
         $this->user = $user;
         $this->fees = $fees;
         $this->sessionYearsTrackingsService = $sessionYearsTrackingsService;
+        $this->smService = $smService;
     }
 
     /**
@@ -51,14 +54,15 @@ class NotificationController extends Controller
         $users = $this->user->guardian()->with('roles')->whereHas('child.user', function ($q) {
             $q->owner();
         })->orWhere(function ($q) use ($roles) {
-            $q->where('school_id', Auth::user()->school_id)
+            $q
+                ->where('school_id', Auth::user()->school_id)
                 ->whereHas('roles', function ($q) use ($roles) {
                     $q->whereIn('name', $roles);
                 });
         })->get();
 
         $all_users = $users->pluck('id')->toArray();
-        $all_users = implode(",", $all_users);
+        $all_users = implode(',', $all_users);
 
         return view('notification.index', compact('users', 'roles', 'all_users', 'over_due_fees_roles'));
     }
@@ -70,6 +74,45 @@ class NotificationController extends Controller
     {
         //
         ResponseService::noFeatureThenRedirect('Announcement Management');
+    }
+
+    //  function to send sms  notification for users
+    public function sendSmsToUsers($mobile, $message)
+    {
+        $response = $this->smService->sendSms($mobile, $message);
+        return response()->json($response);
+    }
+
+    public function send_notification_via_sms($userIds, $title, $body, $type, $customData = [])
+    {
+        // Fetch users with IDs in $userIds, including their school
+        $users = User::with('school')->whereIn('id', $userIds)->get();
+
+        foreach ($users as $singleUser) {
+            // Check if user has a mobile number
+            if (!empty($singleUser->mobile)) {
+                // Get the user's role names; assuming a user can have multiple roles
+                $roleNames = $singleUser->roles->pluck('name')->implode(', ');  // Fetch role names
+
+                // Get the school name
+                if ($singleUser->school) {
+                    $schoolName = $singleUser->school->name;  // Get the school name
+                    $schoolId = $singleUser->school->id;  // Get the school ID
+                } else {
+                    $schoolName = 'Unknown School';  // Default to unknown if school is null
+                    $schoolId = 'Unknown ID';  // Set to unknown ID
+                }
+
+                // Generate the message content
+                $fromMessage = $schoolName !== 'Unknown School' ? "From: {$schoolName} School\n\n" : '';
+                $message = "Hi {$roleNames},\n\n{$fromMessage}{$title}\n{$body}";
+
+                // Send SMS using the defined method
+                $this->sendSmsToUsers($singleUser->mobile, $message);
+            } else {
+                ResponseService::warningResponse("The contact's does not have a mobile number.");
+            }
+        }
     }
 
     /**
@@ -101,7 +144,7 @@ class NotificationController extends Controller
             $sessionYear = $this->cache->getDefaultSessionYear();
             $roles = Role::whereNot('name', 'School Admin')->whereIn('id', $request->roles)->pluck('name');
             $rolesArray = $roles->toarray();
-            $roles = implode(', ', $rolesArray); 
+            $roles = implode(', ', $rolesArray);
             $data = [
                 'title' => $request->title,
                 'message' => $request->message,
@@ -125,13 +168,20 @@ class NotificationController extends Controller
 
             $this->sessionYearsTrackingsService->storeSessionYearsTracking('App\Models\Notification', $notification->id, Auth::user()->id, $sessionYear->id, Auth::user()->school_id, null);
 
-            $title = $request->title; // Title for Notification
+            $title = $request->title;  // Title for Notification
             $body = $request->message;
             $type = 'Notification';
 
             DB::commit();
-            send_notification($notifyUser, $title, $body, $type, $customData); // Send Notification
+            // send_notification($notifyUser, $title, $body, $type, $customData);  
+            // ResponseService::successResponse('Data Stored Successfully');
+
+            // Use $this->send_notification_via_sms to call the method within the same class
+            $this->send_notification_via_sms($notifyUser, $title, $body, $type, $customData);
+
             ResponseService::successResponse('Data Stored Successfully');
+
+
         } catch (Throwable $e) {
             if (
                 Str::contains($e->getMessage(), [
@@ -140,10 +190,10 @@ class NotificationController extends Controller
                 ])
             ) {
                 DB::commit();
-                ResponseService::warningResponse("Data Stored successfully. But App push notification not send.");
+                ResponseService::warningResponse('Data Stored successfully. But App push notification not send.');
             } else {
                 DB::rollBack();
-                ResponseService::logErrorResponse($e, "Notification Controller -> Store Method");
+                ResponseService::logErrorResponse($e, 'Notification Controller -> Store Method');
                 ResponseService::errorResponse();
             }
         }
@@ -163,7 +213,10 @@ class NotificationController extends Controller
         $order = request('order', 'DESC');
         $search = request('search');
 
-        $sql = $this->notification->builder()->with('session_years_trackings')
+        $sql = $this
+            ->notification
+            ->builder()
+            ->with('session_years_trackings')
             ->where(function ($query) use ($search) {
                 $query->when($search, function ($q) use ($search) {
                     $q->where('title', 'LIKE', "%$search%")->orwhere('message', 'LIKE', "%$search%")->Owner();
@@ -176,7 +229,7 @@ class NotificationController extends Controller
         // dd($sql->get()->toArray());
         $total = $sql->count();
         if ($offset >= $total && $total > 0) {
-            $lastPage = floor(($total - 1) / $limit) * $limit; // calculate last page offset
+            $lastPage = floor(($total - 1) / $limit) * $limit;  // calculate last page offset
             $offset = $lastPage;
         }
         $sql->orderBy($sort, $order)->skip($offset)->take($limit);
@@ -231,14 +284,13 @@ class NotificationController extends Controller
             $this->sessionYearsTrackingsService->deleteSessionYearsTracking('App\Models\Notification', $id, Auth::user()->id, $sessionYear->id, Auth::user()->school_id, null);
             ResponseService::successResponse('Data Deleted Successfully');
         } catch (Throwable $e) {
-            ResponseService::logErrorResponse($e, "Notification Controller -> Delete Method");
+            ResponseService::logErrorResponse($e, 'Notification Controller -> Delete Method');
             ResponseService::errorResponse();
         }
     }
 
     public function userShow(Request $request)
     {
-
         ResponseService::noFeatureThenSendJson('Announcement Management');
         ResponseService::noPermissionThenSendJson('notification-list');
         $offset = request('offset', 0);
@@ -248,12 +300,16 @@ class NotificationController extends Controller
         $search = request('search');
         $type = request('type');
 
-        $sql = $this->user->builder()->whereHas('roles', function ($q) {
-            $q->whereNot('name', 'School Admin');
-        })
+        $sql = $this
+            ->user
+            ->builder()
+            ->whereHas('roles', function ($q) {
+                $q->whereNot('name', 'School Admin');
+            })
             ->where(function ($query) use ($search) {
                 $query->when($search, function ($q) use ($search) {
-                    $q->where('first_name', 'LIKE', "%$search%")
+                    $q
+                        ->where('first_name', 'LIKE', "%$search%")
                         ->orwhere('last_name', 'LIKE', "%$search%")
                         ->orWhereRaw("concat(first_name,' ',last_name) LIKE '%" . $search . "%'")
                         ->Owner();
@@ -274,7 +330,9 @@ class NotificationController extends Controller
 
             if ($fees->isNotEmpty()) {
                 foreach ($fees as $fee) {
-                    $overdueStudents = $this->user->builder()
+                    $overdueStudents = $this
+                        ->user
+                        ->builder()
                         ->role('Student')
                         ->select('id', 'first_name', 'last_name')
                         ->with([
@@ -296,7 +354,7 @@ class NotificationController extends Controller
                         ->get();
 
                     $users_ids = array_unique(array_merge($overdueStudents->pluck('id')->toArray() ?? [], $overdueStudents->pluck('student.guardian.id')->toArray() ?? []));
-                    $sql = $this->user->builder()->whereIn("id", $users_ids);
+                    $sql = $this->user->builder()->whereIn('id', $users_ids);
 
                     if (is_array($request->over_due_fees_roles)) {
                         $sql->whereHas('roles', function ($q) use ($request) {
@@ -305,12 +363,12 @@ class NotificationController extends Controller
                     }
                 }
             } else {
-                $sql = $this->user->builder()->whereIn("id", $users_ids);
+                $sql = $this->user->builder()->whereIn('id', $users_ids);
             }
         }
         $total = $sql->count();
         if ($offset >= $total && $total > 0) {
-            $lastPage = floor(($total - 1) / $limit) * $limit; // calculate last page offset
+            $lastPage = floor(($total - 1) / $limit) * $limit;  // calculate last page offset
             $offset = $lastPage;
         }
         $sql->orderBy($sort, $order)->skip($offset)->take($limit);
@@ -321,7 +379,6 @@ class NotificationController extends Controller
         $rows = array();
         $no = 1;
         foreach ($res as $row) {
-
             $tempRow = $row->toArray();
             $tempRow['no'] = $no++;
             $rows[] = $tempRow;
@@ -329,6 +386,5 @@ class NotificationController extends Controller
 
         $bulkData['rows'] = $rows;
         return response()->json($bulkData);
-
     }
 }

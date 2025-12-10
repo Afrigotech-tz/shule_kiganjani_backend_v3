@@ -33,6 +33,14 @@ return [
     'recaptcha' => [
         'key' => env('RECAPTCHA_SITE_KEY'),
         'secret' => env('RECAPTCHA_SECRET_KEY'),
-    ]
+    ],
 
+    'sms' => [
+        'api_url' => env('SMS_API_URL', 'https://messaging-service.co.tz/api/sms/v1/text/single'),
+        'api_key' => env('SMS_API_KEY', 'YmVubnljaXZlOkJlbm55QGNvZGVyMQ=='),
+        'sender_id' => env('SMS_SENDER_ID', 'Afrigotech'),  
+    ],
+
+
+    
 ];

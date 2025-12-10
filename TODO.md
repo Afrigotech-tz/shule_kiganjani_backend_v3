@@ -1,4 +1,0 @@
-- [x] Replace all instances of window.trans["Please Wait..."] with (window.trans && window.trans["Please Wait..."]) || "Please Wait..." in public/assets/home_page/js/custom/common.js
-- [ ] Check and fix other window.trans accesses in the file if needed
-- [ ] Check other JS files for similar issues
-- [ ] Test the fix by running the application
