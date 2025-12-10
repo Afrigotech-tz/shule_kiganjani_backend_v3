@@ -196,12 +196,15 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-6">
                                 <div class="flex_column_start">
-                                    <span class="commonTitle">{{ $settings['system_name'] ?? 'eSchool SaaS' }}</span>
+                                    <span class="commonTitle">{{ $settings['system_name'] ?? 'Shule Kiganjani' }}</span>
                                     <span class="commonDesc">
-                                        {{ $settings['tag_line'] }}
+                                        {{-- {{ $settings['tag_line'] }} --}}
+                                        {{ __('tag_line_saas') }}
                                     </span>
                                     <span class="commonText">
-                                        {{ $settings['hero_description'] }}</span>
+                                        {{-- {{ $settings['hero_description'] }} --}}
+                                        {{ __('hero_description_saas') }}
+                                    </span>
                                     <div class="d-flex">
                                         <button class="commonBtn" data-bs-toggle="modal"
                                             data-bs-target="#staticBackdrop">{{ __('register_your_school') }}</button>
@@ -306,20 +309,31 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="whyBestTextWrapper">
-                        <p>{{ $settings['about_us_title'] }}</p>
-                        <p>{{ $settings['about_us_heading'] }}</p>
+                        <p>
+                            {{-- {{ $settings['about_us_title'] }} --}}
+                            {{ __('about_us_title') }}
+                        </p>
+                        <p>
+                            {{-- {{ $settings['about_us_heading'] }} --}}
+                            {{ __('about_us_heading') }}
+
+                        </p>
                     </div>
                     <p class="whyBestPara">
-                        {{ $settings['about_us_description'] }}
+                        {{-- {{ $settings['about_us_description'] }} --}}
+                        {{ __('about_us_description') }}
                     </p>
 
                     <div class="listWrapper">
-                        @foreach ($about_us_lists as $point)
-                            <span>
-                                <i class="fa-regular fa-circle-check"></i>
-                                {{ $point }}
-                            </span>
-                        @endforeach
+                        <span>
+                            <i class="fa-regular fa-circle-check"></i>
+                            {{__('data_security')}}
+                        </span>
+                        <span>
+                             <i class="fa-regular fa-circle-check"></i>
+                            {{__('easy_to_manage_panel')}}
+                        </span>
+
                     </div>
                 </div>
 
@@ -469,7 +483,8 @@
                     <div class="text">
                         <span class="title">{{ __('download_our_app_now') }}</span>
                         <span>
-                            {{ $settings['download_our_app_description'] ?? '' }}
+                            {{-- {{ $settings['download_our_app_description'] ?? '' }} --}}
+                            {{__('download_our_app_description')}}
                         </span>
                     </div>
                     <div class="storeImgs">

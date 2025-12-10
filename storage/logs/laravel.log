@@ -66,3 +66,55 @@
 [2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552873543298  
 [2025-12-10 14:19:45] local.INFO: Normalized number: 255684573370  
 [2025-12-10 14:19:46] local.INFO: SMS response: {"success":true,"response":{}}  
+[2025-12-10 16:09:16] local.ERROR: Uncaught RuntimeException: Translation file [D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\resources\lang/en.json] contains an invalid JSON structure. in D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php:152
+Stack trace:
+#0 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Collections\Traits\EnumeratesValues.php(791): Illuminate\Translation\FileLoader->Illuminate\Translation\{closure}()
+#1 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php(147): Illuminate\Support\Collection->reduce()
+#2 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php(64): Illuminate\Translation\FileLoader->loadJsonPaths()
+#3 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\Translator.php(311): Illuminate\Translation\FileLoader->load()
+#4 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\Translator.php(148): Illuminate\Translation\Translator->load()
+#5 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(923): Illuminate\Translation\Translator->get()
+#6 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(958): trans()
+#7 Command line code(1): __()
+#8 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught RuntimeException: Translation file [D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\resources\\lang/en.json] contains an invalid JSON structure. in D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php:152
+Stack trace:
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(791): Illuminate\\Translation\\FileLoader->Illuminate\\Translation\\{closure}()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php(147): Illuminate\\Support\\Collection->reduce()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php(64): Illuminate\\Translation\\FileLoader->loadJsonPaths()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\Translator.php(311): Illuminate\\Translation\\FileLoader->load()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\Translator.php(148): Illuminate\\Translation\\Translator->load()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(923): Illuminate\\Translation\\Translator->get()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(958): trans()
+#7 Command line code(1): __()
+#8 {main}
+  thrown at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php:152)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-10 16:09:33] local.ERROR: Uncaught RuntimeException: Translation file [D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\resources\lang/en.json] contains an invalid JSON structure. in D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php:152
+Stack trace:
+#0 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Collections\Traits\EnumeratesValues.php(791): Illuminate\Translation\FileLoader->Illuminate\Translation\{closure}()
+#1 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php(147): Illuminate\Support\Collection->reduce()
+#2 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\FileLoader.php(64): Illuminate\Translation\FileLoader->loadJsonPaths()
+#3 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\Translator.php(311): Illuminate\Translation\FileLoader->load()
+#4 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Translation\Translator.php(148): Illuminate\Translation\Translator->load()
+#5 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(923): Illuminate\Translation\Translator->get()
+#6 D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php(958): trans()
+#7 Command line code(1): __()
+#8 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught RuntimeException: Translation file [D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\resources\\lang/en.json] contains an invalid JSON structure. in D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php:152
+Stack trace:
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Traits\\EnumeratesValues.php(791): Illuminate\\Translation\\FileLoader->Illuminate\\Translation\\{closure}()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php(147): Illuminate\\Support\\Collection->reduce()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php(64): Illuminate\\Translation\\FileLoader->loadJsonPaths()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\Translator.php(311): Illuminate\\Translation\\FileLoader->load()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\Translator.php(148): Illuminate\\Translation\\Translator->load()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(923): Illuminate\\Translation\\Translator->get()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\helpers.php(958): trans()
+#7 Command line code(1): __()
+#8 {main}
+  thrown at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Translation\\FileLoader.php:152)
+[stacktrace]
+#0 {main}
+"} 

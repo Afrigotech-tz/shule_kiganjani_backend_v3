@@ -871,9 +871,7 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
         });
         Route::resource('notifications', NotificationController::class);
 
-        
-        
-
+    
         Route::group(['prefix' => 'school'], static function () {
             Route::group(['prefix' => 'web-settings'], static function () {
                 Route::get('/', [WebSettingsController::class, 'school_index'])->name('school.web-settings.index');
