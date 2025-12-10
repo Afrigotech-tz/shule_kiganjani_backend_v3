@@ -16,6 +16,7 @@ use App\Services\SmService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use DB;
@@ -77,11 +78,65 @@ class NotificationController extends Controller
     }
 
     //  function to send sms  notification for users
+    // public function sendSmsToUsers($mobile, $message)
+    // {
+
+    //     $response = $this->smService->sendSms($mobile, $message);
+    //     return response()->json($response);
+    // }
+
+    // public function sendSmsToUsers($mobile, $message)
+    // {
+    //     // Remove any spaces, dashes or special characters
+    //     $mobile = preg_replace('/\D/', '', $mobile);
+
+    //     // Normalize the number
+    //     if (substr($mobile, 0, 1) === '0') {
+    //         $mobile = '255' . substr($mobile, 1);
+    //     } elseif (substr($mobile, 0, 3) !== '255') {
+    //         $mobile = '255' . $mobile;
+    //     }
+
+    //     Log::info('Sending SMS to: ' . $mobile);
+
+    //     $response = $this->smService->sendSms($mobile, $message);
+    //     return response()->json($response);
+
+    // }
+
     public function sendSmsToUsers($mobile, $message)
     {
+        // Remove any non-digit characters
+        $mobile = preg_replace('/\D/', '', $mobile);
+
+        // Normalize the number
+        if (substr($mobile, 0, 1) === '0') {
+            $mobile = '255' . substr($mobile, 1);
+        } elseif (substr($mobile, 0, 3) !== '255') {
+            $mobile = '255' . $mobile;
+        }
+
+        // Log the normalized number
+        Log::info('Normalized number: ' . $mobile);
+
+        // Validate the length (must be exactly 12 digits)
+        if (strlen($mobile) !== 12) {
+            Log::warning('Invalid phone number skipped: ' . $mobile);
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid phone number'
+            ], 400);
+        }
+
+        // Send SMS
         $response = $this->smService->sendSms($mobile, $message);
+
+        // Log the response
+        Log::info('SMS response: ' . json_encode($response));
+
         return response()->json($response);
     }
+    
 
     public function send_notification_via_sms($userIds, $title, $body, $type, $customData = [])
     {
@@ -173,15 +228,13 @@ class NotificationController extends Controller
             $type = 'Notification';
 
             DB::commit();
-            // send_notification($notifyUser, $title, $body, $type, $customData);  
+            // send_notification($notifyUser, $title, $body, $type, $customData);
             // ResponseService::successResponse('Data Stored Successfully');
 
             // Use $this->send_notification_via_sms to call the method within the same class
             $this->send_notification_via_sms($notifyUser, $title, $body, $type, $customData);
 
             ResponseService::successResponse('Data Stored Successfully');
-
-
         } catch (Throwable $e) {
             if (
                 Str::contains($e->getMessage(), [

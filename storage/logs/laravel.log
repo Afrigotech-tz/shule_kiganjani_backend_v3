@@ -1,0 +1,68 @@
+[2025-12-10 14:03:37] local.INFO: The data received from the sms sent {"data":"971-898-1457"} 
+[2025-12-10 14:03:38] local.INFO: The data received from the sms sent {"data":"388-445-8866"} 
+[2025-12-10 14:03:38] local.INFO: The data received from the sms sent {"data":"699-789-5134"} 
+[2025-12-10 14:03:39] local.INFO: The data received from the sms sent {"data":"491-402-9147"} 
+[2025-12-10 14:03:39] local.INFO: The data received from the sms sent {"data":"338-743-1741"} 
+[2025-12-10 14:03:39] local.INFO: The data received from the sms sent {"data":"527-231-0302"} 
+[2025-12-10 14:03:40] local.INFO: The data received from the sms sent {"data":"377-204-4024"} 
+[2025-12-10 14:03:40] local.INFO: The data received from the sms sent {"data":"797-464-4705"} 
+[2025-12-10 14:03:40] local.INFO: The data received from the sms sent {"data":"287-354-3298"} 
+[2025-12-10 14:03:40] local.INFO: The data received from the sms sent {"data":"255684573370"} 
+[2025-12-10 14:15:59] local.INFO: Sending SMS to: 255122  
+[2025-12-10 14:16:00] local.INFO: Sending SMS to: 2553884458866  
+[2025-12-10 14:16:00] local.INFO: Sending SMS to: 2556997895134  
+[2025-12-10 14:16:01] local.INFO: Sending SMS to: 2554914029147  
+[2025-12-10 14:16:01] local.INFO: Sending SMS to: 2553387431741  
+[2025-12-10 14:16:01] local.INFO: Sending SMS to: 2555272310302  
+[2025-12-10 14:16:02] local.INFO: Sending SMS to: 2553772044024  
+[2025-12-10 14:16:02] local.INFO: Sending SMS to: 2557974644705  
+[2025-12-10 14:16:02] local.INFO: Sending SMS to: 2552873543298  
+[2025-12-10 14:16:03] local.INFO: Sending SMS to: 255684573370  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2555943131408  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2555943131408  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 25591  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 25591  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2553513287840  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2553513287840  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2552308139738  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552308139738  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2556139589121  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2556139589121  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2554948523080  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2554948523080  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2559362801800  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2559362801800  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 255180  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 255180  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2552752532930  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552752532930  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2554583050742  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2554583050742  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2552826476178  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552826476178  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 255150  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 255150  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2552177179136  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552177179136  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2559718981457  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2559718981457  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 255122  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 255122  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2553884458866  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2553884458866  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2556997895134  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2556997895134  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2554914029147  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2554914029147  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2553387431741  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2553387431741  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2555272310302  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2555272310302  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2553772044024  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2553772044024  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2557974644705  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2557974644705  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 2552873543298  
+[2025-12-10 14:19:45] local.WARNING: Invalid phone number skipped: 2552873543298  
+[2025-12-10 14:19:45] local.INFO: Normalized number: 255684573370  
+[2025-12-10 14:19:46] local.INFO: SMS response: {"success":true,"response":{}}  
