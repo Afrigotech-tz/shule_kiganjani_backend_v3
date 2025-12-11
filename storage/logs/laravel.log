@@ -118,3 +118,5 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2025-12-11 11:58:31] local.INFO: Switched to database: eschool_saas_3_dodoma  
+[2025-12-11 11:58:31] local.INFO: User authenticated successfully. {"user_id":4,"email":"athanaslink@gmail.com"} 

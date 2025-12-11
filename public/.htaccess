@@ -4,8 +4,8 @@
     </IfModule>
 
     <IfModule mod_headers.c>
-    # Allow localhost (for development) and production domain (wrteam.net)
-        SetEnvIf Origin "http(s)?://(localhost:3000|wrteam\.net)$" AccessControlAllowOrigin=$0
+    # Allow localhost (for development) and production domain (afrigotech.net)
+        SetEnvIf Origin "http(s)?://(localhost:3000|afrigotech\.net)$" AccessControlAllowOrigin=$0
         Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
         Header always set Access-Control-Allow-Credentials "true"
         Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"

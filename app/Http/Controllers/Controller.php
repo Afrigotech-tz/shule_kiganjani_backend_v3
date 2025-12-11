@@ -875,7 +875,7 @@ class Controller extends BaseController
     {
         // return 1;
         // return $request;
-        // Config::set('database.connections.school.database', 'eschool_saas_2_school');
+        // Config::set('database.connections.school.database', 'shulekiganjani_saas2_school');
         // DB::purge('school');
         // DB::connection('school')->reconnect();
         // DB::setDefaultConnection('school');

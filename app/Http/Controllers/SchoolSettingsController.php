@@ -131,11 +131,11 @@ class SchoolSettingsController extends Controller
         // Remove the TLD (.net, .com, etc.)
         $parts = explode('.', $host);
 
-        // If only two parts (e.g., wrteam.net) → return only first
+        // If only two parts (e.g., afrigotech.net) → return only first
         if (count($parts) == 2) {
             $host = $parts[0];
         }
-        // If more than two parts (e.g., subdomain.wrteam.net)
+        // If more than two parts (e.g., subdomain.afrigotech.net)
         else {
             $host = implode('.', array_slice($parts, 0, -1)); // remove last (.net)
         }

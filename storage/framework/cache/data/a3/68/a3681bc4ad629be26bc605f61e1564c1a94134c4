@@ -1,4 +1,4 @@
-1765374280s:82660:"{
+1765447382s:84072:"{
     "The :attribute must contain at least one letter.": "The :attribute must contain at least one letter.",
     "The :attribute must contain at least one number.": "The :attribute must contain at least one number.",
     "The :attribute must contain at least one symbol.": "The :attribute must contain at least one symbol.",
@@ -23,7 +23,15 @@
     "date_format": "Date Format",
     "time_format": "Time Format",
     "color": "Color",
+    "tag_line_saas":"Transform School Management With Shule Kiganjani",
+    "hero_description_saas":"Experience the future of education with our Shule Kiganjani platform. Streamline attendance, assignments, exams, and more. Elevate your school's efficiency and engagement.",
+    "about_us_title":"A modern and unique style",
+    "about_us_heading":"Why it is best?",
+    "about_us_description":"Shule Kiganjani is the pinnacle of school management, offering advanced technology, user-friendly features, and personalized solutions. It simplifies communication, streamlines administrative tasks, and elevates the educational experience for all stakeholders. With Shule Kiganjani, excellence in education management is guaranteed.",
     "medium": "Medium",
+    "data_security":"Data Security",
+    "easy_to_manage_panel":"Easy to manage admin panel",
+    "download_our_app_description":"Join the ranks of true trivia champions and quench your thirst for knowledge with Masters of Trivia - the ultimate quiz app designed to test your wits and unlock a world of fun facts. Challenge your brain, compete with friends, and discover fascinating tidbits from diverse categories. Don't miss out on the exhilarating experience that awaits you - get started now!Join the ranks of true trivia champions and quench your thirst for knowledge with Masters of Trivia - the ultimate quiz app designed to test your wits and unlock a world of fun facts.",
     "manage_medium": "Manage Medium",
     "create_medium": "Create Medium",
     "list_medium": "List Medium",

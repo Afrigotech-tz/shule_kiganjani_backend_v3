@@ -537,6 +537,7 @@
                 setTimeout(() => {
                     tabs[0].click();
                 }, 1000);
+                
             });
 
             document.addEventListener('DOMContentLoaded', () => {

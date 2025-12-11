@@ -69,7 +69,7 @@
                     <div class="col-xl-6 mx-auto auth-form-light p-4 m-4">
                         @if (env('DEMO_MODE'))
                             <div class="alert alert-info text-center" role="alert">
-                                NOTE : <a target="_blank" href="https://eschool-saas.wrteam.me/login">-- Click Here --</a>
+                                NOTE : <a target="_blank" href="https://eschool-saas.afrigotech.me/login">-- Click Here --</a>
                                 if you cannot login.
                             </div>
                         @endif

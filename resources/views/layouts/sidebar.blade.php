@@ -1442,7 +1442,7 @@
 
         @if (Auth::user()->hasRole(['Super Admin']))
             <li class="nav-item">
-                <a class="nav-link" href="https://wrteam-in.github.io/eSchool-SaaS-Doc/" target="_blank">
+                <a class="nav-link" href="https://afrigotech-in.github.io/eSchool-SaaS-Doc/" target="_blank">
                     <i class="fa fa-book menu-icon"></i>
                     <span class="menu-title">{{ __('Documentation') }}</span>
                 </a>

@@ -121,11 +121,11 @@ class SchoolController extends Controller
         // Remove the TLD (.net, .com, etc.)
         $parts = explode('.', $host);
 
-        // If only two parts (e.g., wrteam.net) → return only first
+        // If only two parts (e.g., afrigotech.net) → return only first
         if (count($parts) == 2) {
             $host = $parts[0];
         }
-        // If more than two parts (e.g., subdomain.wrteam.net)
+        // If more than two parts (e.g., subdomain.afrigotech.net)
         else {
             $host = implode('.', array_slice($parts, 0, -1)); // remove last (.net)
         }
@@ -202,7 +202,7 @@ class SchoolController extends Controller
             $school_name = str_replace('.', '_', $request->school_name);
             // remove all special characters from school_name
             $school_name = preg_replace('/[^a-zA-Z0-9]/', '', $school_name);
-            $database_name = 'eschool_saas_' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
+            $database_name = 'shulekiganjani_saas' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
 
             $admin_data = array(
                 'first_name' => "School",
@@ -1085,7 +1085,7 @@ class SchoolController extends Controller
 
                 $school_name = str_replace('.', '_', $request->school_name);
                 $school_name = preg_replace('/[^a-zA-Z0-9]/', '', $school_name);
-                $database_name = 'eschool_saas_' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
+                $database_name = 'shulekiganjani_saas' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
 
                 // Set initial status as pending
                 $this->schoolsRepository->update($schoolData->id, ['admin_id' => $user->id, 'database_name' => $database_name, 'status' => 0]);
@@ -1230,7 +1230,7 @@ class SchoolController extends Controller
             // $user->assignRole('School Admin');
 
             $school_name = str_replace('.', '_', $schoolData->name);
-            $database_name = 'eschool_saas_' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
+            $database_name = 'shulekiganjani_saas' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
 
             // Update Admin id to School Data and set status as pending
             $schoolData = $this->schoolsRepository->update($schoolData->id, ['admin_id' => $user->id, 'database_name' => $database_name, 'status' => 0]);
@@ -1415,7 +1415,7 @@ class SchoolController extends Controller
 
                 $school_name = str_replace('.', '_', $request->school_name);
                 $school_name = preg_replace('/[^a-zA-Z0-9]/', '', $school_name);
-                $database_name = 'eschool_saas_' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
+                $database_name = 'shulekiganjani_saas' . $schoolData->id . '_' . strtolower(strtok($school_name, " "));
 
                 $admin_data = array(
                     'first_name' => 'School',
