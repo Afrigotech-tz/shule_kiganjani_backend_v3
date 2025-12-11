@@ -28,7 +28,7 @@ return new class extends Migration
         foreach ($schools as $key => $school) {
             DB::setDefaultConnection('mysql');
             $school_name = str_replace('.','_',$school->name);
-            $database_name = 'shulekiganjani_saas'.$school->id.'_'.strtolower(strtok($school_name," "));
+            $database_name = 'shulekiganjani_saas_'.$school->id.'_'.strtolower(strtok($school_name," "));
             
             $query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME =  ?";
 

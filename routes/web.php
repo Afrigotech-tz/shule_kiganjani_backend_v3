@@ -426,6 +426,7 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
             Route::put("/{id}/restore", [SubjectController::class, 'restore'])->name('subjects.restore');
             Route::delete("/{id}/deleted", [SubjectController::class, 'trash'])->name('subjects.trash');
         });
+        
         Route::resource('subjects', SubjectController::class);
 
         /*** Class ***/

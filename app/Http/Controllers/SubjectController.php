@@ -31,7 +31,9 @@ class SubjectController extends Controller
         ResponseService::noPermissionThenRedirect('subject-list');
         $mediums = $this->medium->builder()->orderBy('id', 'DESC')->get();
         return response(view('subjects.index', compact('mediums')));
+
     }
+
 
     public function show(Request $request)
     {
@@ -114,7 +116,7 @@ class SubjectController extends Controller
                 'nullable',
                 new uniqueForSchool('subjects', ['code' => $request->code, 'medium_id' => $request->medium_id, 'type' => $request->type])
             ],
-            'image' => ['required', 'mimes:jpg,jpeg,png,svg', new MaxFileSize($file_upload_size_limit)],
+            'image' => ['nullable', 'mimes:jpg,jpeg,png,svg', new MaxFileSize($file_upload_size_limit)],
         ])->setAttributeNames(['bg_color' => 'Background Color']);
 
         if ($validator->fails()) {
@@ -128,6 +130,8 @@ class SubjectController extends Controller
             ResponseService::errorResponse();
         }
     }
+
+
 
     public function update(Request $request, $id)
     {

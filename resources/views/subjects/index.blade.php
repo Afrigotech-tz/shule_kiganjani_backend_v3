@@ -57,15 +57,15 @@
 
                             <div class="form-group">
                                 <label>{{ __('subject_code') }}</label>
-                                <input name="code" type="text" placeholder="{{ __('subject_code') }}" class="form-control"/>
+                                <input name="code" type="text" placeholder="{{ __('subject_code') }}" class="form-control" readonly/>
                             </div>
 
                             <div class="form-group">
-                                <label>{{ __('bg_color') }} <span class="text-danger">*</span></label>
-                                <input name="bg_color" type="text" placeholder="{{ __('bg_color') }}" class="color-picker" autocomplete="off"/>
+                                {{-- <label>{{ __('bg_color') }} <span class="text-danger">*</span></label> --}}
+                                <input name="bg_color" type="hidden" placeholder="{{ __('bg_color') }}" value="#d9d3d3" class="color-picker" autocomplete="off"/>
                             </div>
 
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>{{ __('image') }} <span class="text-danger">*</span></label>
                                 <input type="file" name="image" class="file-upload-default" accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/svg"/>
                                 <div class="input-group col-xs-12">
@@ -74,7 +74,8 @@
                                         <button class="file-upload-browse btn btn-theme" type="button">{{ __('upload') }}</button>
                                     </span>
                                 </div>
-                            </div>
+                            </div> --}}
+
                             <input class="btn btn-theme float-right ml-3" id="create-btn" type="submit" value={{ __('submit') }}>
                             <input class="btn btn-secondary float-right" type="reset" value={{ __('reset') }}>
                         </form>
@@ -119,7 +120,7 @@
                                 <th scope="col" data-field="code" data-sortable="true">{{ __('subject_code') }}</th>
                                 <th scope="col" data-field="bg_color" data-formatter="bgColorFormatter">{{ __('bg_color') }}</th>
                                 <th scope="col" data-field="medium.name">{{ __('medium') }}</th>
-                                <th scope="col" data-field="image" data-formatter="imageFormatter">{{ __('image') }}</th>
+                                {{-- <th scope="col" data-field="image" data-formatter="imageFormatter">{{ __('image') }}</th> --}}
                                 <th scope="col" data-field="type" data-sortable="true">{{ __('type') }}</th>
                                 <th scope="col" data-field="created_at"  data-sortable="true" data-visible="false">{{ __('created_at') }}</th>
                                 <th scope="col" data-field="updated_at"  data-sortable="true" data-visible="false">{{ __('updated_at') }}</th>
@@ -213,4 +214,25 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const nameInput = document.querySelector('input[name="name"]');
+    const codeInput = document.querySelector('input[name="code"]');
+
+    nameInput.addEventListener('input', function () {
+        const name = nameInput.value.trim();
+
+        if (name.length > 0) {
+            const firstLetter = name[0].toUpperCase();
+            const randomNum = Math.floor(10000 + Math.random() * 90000);
+            codeInput.value = firstLetter + randomNum;
+        } else {
+            codeInput.value = "";
+        }
+    });
+});
+</script>
 @endsection

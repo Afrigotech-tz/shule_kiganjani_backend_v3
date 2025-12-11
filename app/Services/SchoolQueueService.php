@@ -106,6 +106,6 @@ final class SchoolQueueService
     public function generateDatabaseName(string $schoolName, int $schoolId): string
     {
         $school_name = str_replace('.', '_', $schoolName);
-        return 'shulekiganjani_saas' . $schoolId . '_' . strtolower(strtok($school_name, " "));
+        return 'shulekiganjani_saas_' . $schoolId . '_' . strtolower(strtok($school_name, " "));
     }
 } 
