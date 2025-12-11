@@ -763,6 +763,7 @@ class StaffController extends Controller
         if (!Auth::user()->school_id) {
             $schools = $this->school->active()->pluck('name', 'id');
         }
+        
         return response(view('staff.bulk_upload', compact('roles', 'schools')));
 
     }

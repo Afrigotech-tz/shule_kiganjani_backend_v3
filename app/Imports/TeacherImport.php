@@ -104,7 +104,7 @@ class TeacherImport implements ToCollection, WithHeadingRow
                     'current_address' => $row['current_address'],
                     'permanent_address' => $row['permanent_address'],
                     'status'     => 0,
-                    'two_factor_enabled' => 0,
+                    'two_factor_enabled' => 1,
                     'two_factor_secret' => null,
                     'two_factor_expires_at' => null,
                     'deleted_at' => '1970-01-01 01:00:00'

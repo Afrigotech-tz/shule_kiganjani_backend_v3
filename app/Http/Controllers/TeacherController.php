@@ -493,11 +493,12 @@ class TeacherController extends Controller {
 
     public function downloadSampleFile() {
         try {
-            return Excel::download(new TeacherDataExport(), 'teachers.xlsx');
+            return Excel::download(new TeacherDataExport(), 'shule_kiganjani_teachers_sample.csv');
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e, 'Teacher Controller ---> Download Sample File');
             ResponseService::errorResponse();
         }
     }
+
 
 }

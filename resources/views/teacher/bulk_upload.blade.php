@@ -26,7 +26,7 @@
                                     </div>
                                     <div class="form-check w-fit-content">
                                         <label class="form-check-label user-select-none">
-                                            <input type="checkbox" class="form-check-input" name="is_send_notification" id="send_notification">
+                                            <input type="checkbox" class="form-check-input" name="is_send_notification" id="send_notification" checked>
                                             {{ __('send_notification') }}
                                         </label>
                                     </div>
