@@ -75,6 +75,7 @@ class StudentController extends Controller
         $sessionYears = $this->sessionYear->all();
         $features = FeaturesService::getFeatures();
         return view('students.details', compact('class_sections', 'extraFields', 'sessionYears', 'features', 'schoolSettings'));
+
     }
 
     public function create()
@@ -94,7 +95,9 @@ class StudentController extends Controller
         $sessionYears = $this->sessionYear->all();
         $features = FeaturesService::getFeatures();
         return view('students.create', compact('class_sections', 'admission_no', 'extraFields', 'sessionYears', 'features'));
+
     }
+    
 
     public function store(Request $request)
     {

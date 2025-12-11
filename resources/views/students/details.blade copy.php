@@ -42,6 +42,7 @@
                                     <button id="update-status" class="btn btn-secondary" disabled><span class="update-status-btn-name">{{ __('Inactive') }}</span></button>
                                 </div>
                             @endcan
+                            
                         </div>
 
                         @can('student-delete')
@@ -66,14 +67,12 @@
                                         <th scope="col" data-field="id" data-sortable="true" data-visible="false">{{ __('id') }}</th>
                                         <th scope="col" data-field="no">{{ __('no.') }}</th>
                                         <th scope="col" data-field="user.id" data-visible="false">{{ __('User Id') }}</th>
-                                        <th scope="col" data-field="user.full_name">{{ __('name') }}</th>
-                                        <th scope="col" data-field="user.dob" data-formatter="dateFormatter">{{ __('dob') }}</th>
-                                        <th scope="col" data-field="user.image" data-formatter="imageFormatter">{{ __('image') }}</th>
+                                        <th scope="col" data-field="user.full_name" data-formatter="StudentNameFormatter">{{ __('name') }}</th>
+                                        <th scope="col" data-field="user.dob" >{{ __('dob') }}</th>
                                         <th scope="col" data-field="class_section.full_name">{{ __('class_section') }}</th>
-                                        <th scope="col" data-field="admission_no"> {{ __('Gr Number') }}</th>
                                         <th scope="col" data-field="roll_number">{{ __('roll_no') }}</th>
                                         <th scope="col" data-field="user.gender">{{ __('gender') }}</th>
-                                        <th scope="col" data-field="admission_date" data-formatter="dateFormatter">{{ __('admission_date') }}</th>
+                                        <th scope="col" data-field="admission_date" >{{ __('admission_date') }}</th>
                                         <th scope="col" data-field="guardian.email">{{ __('guardian') . ' ' . __('email') }}</th>
                                         <th scope="col" data-field="guardian.full_name">{{ __('guardian') . ' ' . __('name') }}</th>
                                         <th scope="col" data-field="guardian.mobile">{{ __('guardian') . ' ' . __('mobile') }}</th>
@@ -237,8 +236,9 @@
 
                                                     {{-- Dropdown Field --}}
                                                 @elseif($data->type == 'dropdown')
+                                                @php $dropdownOptions = array_combine($data->default_values, $data->default_values); @endphp
                                                     {{ Form::select(
-                                                        'extra_fields['.$key.'][data]',$data->default_values,
+                                                        'extra_fields['.$key.'][data]',$dropdownOptions,
                                                         null,
                                                         [
                                                             'id' => $fieldName,
@@ -395,6 +395,7 @@
 @endsection
 @section('script')
     <script>
+        let originalFormat = "{{ $schoolSettings['date_format'] }}"; // PHP value
         let userIds;
         $('.table-list-type').on('click', function (e) {
             let value = $(this).data('id');
