@@ -364,3 +364,4 @@ Stack trace:
 #70 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('...')
 #71 {main}
 "} 
+[2025-12-11 15:36:00] local.ERROR:   SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`shulekiganjani_saas8_afrigotech`.`subjects`, CONSTRAINT `subjects_medium_id_foreign` FOREIGN KEY (`medium_id`) REFERENCES `mediums` (`id`) ON DELETE CASCADE) (Connection: school, SQL: insert into `subjects` (`name`, `type`, `code`, `bg_color`, `school_id`, `updated_at`, `created_at`) values (Biology, Theory, B13816, #d9d3d3, 8, 2025-12-11 15:36:00, 2025-12-11 15:36:00))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 829  

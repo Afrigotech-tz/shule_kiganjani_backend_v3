@@ -118,7 +118,7 @@
                                 <th scope="col" data-field="no">{{ __('no.') }}</th>
                                 <th scope="col" data-field="name" data-sortable="true">{{ __('name') }}</th>
                                 <th scope="col" data-field="code" data-sortable="true">{{ __('subject_code') }}</th>
-                                <th scope="col" data-field="bg_color" data-formatter="bgColorFormatter">{{ __('bg_color') }}</th>
+                                {{-- <th scope="col" data-field="bg_color" data-formatter="bgColorFormatter">{{ __('bg_color') }}</th> --}}
                                 <th scope="col" data-field="medium.name">{{ __('medium') }}</th>
                                 {{-- <th scope="col" data-field="image" data-formatter="imageFormatter">{{ __('image') }}</th> --}}
                                 <th scope="col" data-field="type" data-sortable="true">{{ __('type') }}</th>
