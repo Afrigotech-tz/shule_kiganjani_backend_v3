@@ -26,11 +26,11 @@
                                 </div>
 
                                 <div class="form-group col-sm-12 col-md-6">
-                                    <label>{{ __('description') }} <span class="text-danger">*</span></label>
-                                    <textarea name="description" required class="form-control"></textarea>
+                                    <label>{{ __('description') }} </label>
+                                    <textarea name="description"  class="form-control"></textarea>
                                 </div>
 
-                                <div class="form-group col-sm-12 col-md-6">
+                                {{-- <div class="form-group col-sm-12 col-md-6">
                                     <label>{{ __('image') }} <span class="text-danger">*</span> <span class="text-info text-small">(308px*397px)</span> </label>
                                     <input type="file" required name="image" class="file-upload-default" accept="image/png,image/jpeg,image/jpg,image/svg+xml,image/svg"/>
                                     <div class="input-group col-xs-12">
@@ -39,7 +39,7 @@
                                             <button class="file-upload-browse btn btn-theme" type="button">{{ __('upload') }}</button>
                                         </span>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group col-sm-12 col-md-6">
                                     <label>{{ __('Classes') }} <span class="text-danger">*</span></label>
