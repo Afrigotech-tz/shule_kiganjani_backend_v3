@@ -107,7 +107,7 @@ class LoginController extends Controller
                 ])
             ) {
                 \Log::info('User authenticated successfully.', [
-                    'user_id' => Auth::guard('web')->id(),
+                    // 'user_id' => Auth::guard('web')->id(),
                     'email' => $request->email,
                 ]);
 
@@ -118,7 +118,7 @@ class LoginController extends Controller
                 // Web Login in Student/Guardian Not Allowed (only App Login)
                 if ($user->hasRole('Student') || $user->hasRole('Guardian')) {
                     Auth::logout();
-                    return redirect()->route('login')->with('error', 'You are not authorized to access Web Login (Student/Guardian)');
+                    return redirect()->route('login')->with('error', 'Student and Guardian are not authorized to access Web Login');
                 }
 
                 // Set custom session data
@@ -213,17 +213,22 @@ class LoginController extends Controller
                     } else {
                         return redirect()->intended('/dashboard');
                     }
+
                 }
+
 
                 session(['db_connection_name' => 'mysql']);
                 return redirect()->intended('/home');
+
             } else {
                 \Log::error('Login attempt failed in main database. Email: ' . $request->email);
             }
-        }
 
+        }
+        
         // Login failed, redirect back with an error message
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
+
     }
 
     private function generate2FACode($length = 6)
@@ -237,7 +242,10 @@ class LoginController extends Controller
             $code .= $characters[rand(0, strlen($characters) - 1)];
         }
 
+
         return $code;
+
+
     }
 
 
@@ -305,3 +313,5 @@ class LoginController extends Controller
     }
 
 }
+
+

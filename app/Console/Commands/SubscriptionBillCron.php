@@ -35,7 +35,7 @@ class SubscriptionBillCron extends Command
      *
      * @var string
      */
-    protected $signature = 'subscriptionBill:cron';
+     protected $signature = 'systemlink:test';
 
     /**
      * The console command description.

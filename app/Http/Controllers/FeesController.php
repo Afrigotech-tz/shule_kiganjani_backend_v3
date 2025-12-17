@@ -989,7 +989,10 @@ class FeesController extends Controller
             ResponseService::errorRedirectResponse();
             return false;
         }
+
     }
+
+
 
     public function payCompulsoryFeesIndex($feesID, $studentID)
     {
@@ -1013,9 +1016,10 @@ class FeesController extends Controller
                 'compulsory_fees.advance_fees'
             ])->findOrFail($studentID);
 
+
         $isFullyPaid = false;
         if (!empty($student->fees_paid) && $student->fees_paid->is_fully_paid) {
-            // ResponseService::successRedirectResponse(route('fees.paid.index'), 'Compulsory Fees Already Paid');
+            ResponseService::successRedirectResponse(route('fees.paid.index'), 'Compulsory Fees Already Paid');
             $isFullyPaid = true;
         }
         $installment_status = 0;
@@ -1070,7 +1074,11 @@ class FeesController extends Controller
 
         $currencySymbol = $this->cache->getSchoolSettings('currency_symbol');
         return view('fees.pay-compulsory', compact('fees', 'student', 'oneInstallmentPaid', 'currencySymbol', 'isFullyPaid', 'due_charges', 'installment_status'));
+
+
     }
+
+
 
     public function payCompulsoryFeesStore(Request $request)
     {

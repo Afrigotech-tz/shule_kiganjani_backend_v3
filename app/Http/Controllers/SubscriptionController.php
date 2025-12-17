@@ -1518,7 +1518,7 @@ class SubscriptionController extends Controller
 
         ];
 
-        $amount = max(100, round($request->amount * 100)); // Ensure minimum ₹1.00 (100 paise)
+        $amount = max(100, round($request->amount * 100)); // Ensure minimum TZS1.00 (100 paise)
         // dd($amount);
         $order = $api->order->create([
             'receipt' => time() . mt_rand(0, 999999),
@@ -1573,7 +1573,7 @@ class SubscriptionController extends Controller
                 'feature_id' => $request->feature_id ?? '',
                 'end_date' => $request->end_date ?? '',
             ];
-            $amount = max(100, round($request->amount * 100)); // Ensure minimum ₹1.00 (100 paise)
+            $amount = max(100, round($request->amount * 100)); // Ensure minimum TZS1.00 (100 paise)
             $api->order->create([
                 'receipt' => $request->razorpay_order_id,
                 'amount' => $amount, // amount in the smallest currency unit

@@ -165,7 +165,7 @@ class SchoolDataService
             ],
             [
                 'name' => 'currency_symbol',
-                'data' => '₹',
+                'data' => 'TZS',
                 'type' => 'string',
                 'school_id' => $schoolData->id,
             ],

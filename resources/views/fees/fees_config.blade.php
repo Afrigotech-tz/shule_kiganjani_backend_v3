@@ -33,7 +33,7 @@
                                     <div class="form-group col-md-2">
                                         <label for="currency_symbol">{{ __('Currency Symbol') }} <span class="text-danger">*</span></label>
                                         <input name="currency_symbol" id="currency_symbol" value="{{ $settings['currency_symbol'] ?? '' }}" type="text" placeholder="{{ __('Currency Symbol') }}" class="form-control"/>
-                                        <span style="color: rgb(0, 55, 107);font-size: 0.8rem" class="ml-2">eg :- ₹</span>
+                                        <span style="color: rgb(0, 55, 107);font-size: 0.8rem" class="ml-2">eg :- TZS</span>
                                     </div>
 
                                     <div class="form-group col-md-4 col-lg-4 col-sm-12">

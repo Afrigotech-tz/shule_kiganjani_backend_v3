@@ -721,8 +721,12 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
             Route::get('/fees-over-due/{class_section_id}', [FeesController::class, 'feesOverDue']);
             Route::post('/student-account-deactivate', [FeesController::class, 'studentAccountDeactivate'])->name('deactivate-student-account');
 
+
+            Route::post('/ipn/payments',[]);
+
            
         });
+
         Route::resource('fees', FeesController::class);
 
 

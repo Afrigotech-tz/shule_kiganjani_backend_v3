@@ -35,6 +35,7 @@ return new class extends Migration
                 $table->string('two_factor_secret')->nullable()->after('two_factor_enabled');
                 $table->string('two_factor_expires_at')->nullable()->after('two_factor_secret');
             });
+
         }
 
         // extra_student_datas table drop and create extra_user_datas table 
@@ -119,11 +120,14 @@ return new class extends Migration
                 $table->date('last_result_submission_date')->nullable()->after('end_date');
             });
         }
+
+
     }
 
     /**
      * Perform the data migration (data swap)
      */
+
     private function migrateData(): void
     {
         \Log::info('Current Database: ' . DB::connection('school')->getDatabaseName());
@@ -150,6 +154,7 @@ return new class extends Migration
     /**
      * Migrate data for each common table
      */
+
     private function migrateTableData(string $commonsTable, array $tables): void
     {
         foreach ($tables as $table) {
@@ -211,7 +216,11 @@ return new class extends Migration
 
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             }
+
+
         }
+      
+        
     }
 
     /**
@@ -247,7 +256,9 @@ return new class extends Migration
                 break;
         }
 
+      
         DB::table($commonsTable)->insert($commonData);
+
     }
 
     /**
@@ -287,8 +298,14 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+
         Schema::table('exams', function (Blueprint $table) {
             $table->dropColumn('last_result_submission_date');
         });
+
+
     }
+
+
 };
+

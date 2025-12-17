@@ -368,3 +368,148 @@ Stack trace:
 [2025-12-11 16:38:37] local.ERROR: Teacher Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'teacher@example.com' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`school_id`, `first_name`, `last_name`, `mobile`, `email`, `dob`, `password`, `gender`, `current_address`, `permanent_address`, `status`, `two_factor_enabled`, `two_factor_secret`, `two_factor_expires_at`, `deleted_at`, `updated_at`, `created_at`) values (8, mussa, amos, 1234567899, teacher@example.com, 2025-11-12, $2y$10$8EpKkhI5WgwDeY//Yhjvxumx8v4k7k/DZTM531aiQZmQxQgTUmqpG, Male, Norway, Norway, 1, 0, ?, ?, 1970-01-01 01:00:00, 2025-12-11 16:38:37, 2025-12-11 16:38:37))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
 [2025-12-11 17:03:56] local.ERROR: Teacher Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'teacher1@example.com' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`school_id`, `first_name`, `last_name`, `mobile`, `email`, `dob`, `password`, `gender`, `current_address`, `permanent_address`, `status`, `two_factor_enabled`, `two_factor_secret`, `two_factor_expires_at`, `deleted_at`, `updated_at`, `created_at`) values (8, mussa, amos, 123457000000, teacher1@example.com, 2025-11-12, $2y$10$P8s9mML8aIiac72F6LkQm.rcJG4MrsmIFOIo4sII.txL2PrK24idG, Male, Norway, Norway, 0, 1, ?, ?, 1970-01-01 01:00:00, 2025-12-11 17:03:56, 2025-12-11 17:03:56))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
 [2025-12-11 17:04:14] local.ERROR: Teacher Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'teacher1@example.com' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`school_id`, `first_name`, `last_name`, `mobile`, `email`, `dob`, `password`, `gender`, `current_address`, `permanent_address`, `status`, `two_factor_enabled`, `two_factor_secret`, `two_factor_expires_at`, `deleted_at`, `updated_at`, `created_at`) values (8, mussa, amos, 123457000000, teacher1@example.com, 2025-11-12, $2y$10$/RoMs/j0v8dGEjsvPxqsS.riZEJloEViB.sCpBM9ZAzVAopO.sYoW, Male, Norway, Norway, 0, 1, ?, ?, 1970-01-01 01:00:00, 2025-12-11 17:04:14, 2025-12-11 17:04:14))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
+[2025-12-11 18:23:18] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 18:23:19] local.ERROR: Login attempt failed in school database. Email: 0684573370  
+[2025-12-11 18:23:37] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 18:23:37] local.INFO: User authenticated successfully. {"user_id":10,"email":"684573370"} 
+[2025-12-11 19:12:44] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:12:44] local.ERROR: Login attempt failed in school database. Email: athanaslink@gmail.com  
+[2025-12-11 19:13:15] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:13:16] local.INFO: User authenticated successfully. {"user_id":10,"email":"bennycive@gmail.com"} 
+[2025-12-11 19:15:40] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:15:40] local.INFO: User authenticated successfully. {"user_id":10,"email":"bennycive@gmail.com"} 
+[2025-12-11 19:16:08] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:16:08] local.ERROR: Login attempt failed in school database. Email: athanaslink@gmail.com  
+[2025-12-11 19:16:22] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:16:22] local.ERROR: Login attempt failed in school database. Email: superadmin@gmail.com  
+[2025-12-11 19:18:46] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-11 19:18:46] local.INFO: User authenticated successfully. {"user_id":9,"email":"athanaslink@gmail.com"} 
+[2025-12-11 19:19:35] local.INFO: Normalized number: 255684573370  
+[2025-12-11 19:19:38] local.INFO: SMS response: {"success":true,"response":{}}  
+[2025-12-11 22:33:07] local.INFO: ****** [{"_token":"UJ7Fn4h3g4Gg5Unv7vBAN81e7WzeJqU43kVWENW9","school_code":"S20251","email":"ledieh@elegantthemes.com"}] 
+[2025-12-15 18:36:34] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-15 18:36:34] local.INFO: User authenticated successfully. {"user_id":9,"email":"athanaslink@gmail.com"} 
+[2025-12-15 19:02:25] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-15 19:02:25] local.INFO: User authenticated successfully. {"user_id":64,"email":"aroni@gmail.com"} 
+[2025-12-15 19:04:26] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-15 19:04:26] local.INFO: User authenticated successfully. {"user_id":9,"email":"athanaslink@gmail.com"} 
+
+[2025-12-16 08:57:07] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-16 08:57:07] local.INFO: User authenticated successfully. {"email":"athanaslink@gmail.com"} 
+[2026-12-16 13:20:46] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2026-12-16 13:20:46] local.INFO: User authenticated successfully. {"email":"athanaslink@gmail.com"} 
+[2026-12-16 13:37:46] local.INFO: Cron is working fine!  
+[2026-12-16 13:40:28] local.ERROR: The command defined in "App\Console\Commands\SubscriptionBillCron" cannot have an empty name. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\LogicException(code: 0): The command defined in \"App\\Console\\Commands\\SubscriptionBillCron\" cannot have an empty name. at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php:564)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(228): Symfony\\Component\\Console\\Application->add()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(217): Illuminate\\Console\\Application->addToParent()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(251): Illuminate\\Console\\Application->add()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(349): Illuminate\\Console\\Application->resolve()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(130): Illuminate\\Foundation\\Console\\Kernel->Illuminate\\Foundation\\Console\\{closure}()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(77): Illuminate\\Console\\Application->bootstrap()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(481): Illuminate\\Console\\Application->__construct()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Illuminate\\Foundation\\Console\\Kernel->getArtisan()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#9 {main}
+"}
+
+
+[2025-12-16 14:54:52] local.ERROR: Student Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '20250802' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`first_name`, `last_name`, `email`, `mobile`, `dob`, `gender`, `password`, `school_id`, `image`, `status`, `current_address`, `permanent_address`, `deleted_at`, `updated_at`, `created_at`) values (Merridie, Jerger, 20250802, 91, 2025-01-25, Male, $2y$10$EQ7V/PqIvkLbrvF8sVbLC.RkbsEs4rSaRwY8gWMrQpnhv4Br1ZPjS, 8, ?, 0, Apt 913, 16th Floor, 1970-01-01 01:00:00, 2025-12-16 14:54:51, 2025-12-16 14:54:51))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
+[2025-12-16 15:21:07] local.ERROR: Student Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '20250802' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`first_name`, `last_name`, `email`, `mobile`, `dob`, `gender`, `password`, `school_id`, `image`, `status`, `current_address`, `permanent_address`, `deleted_at`, `updated_at`, `created_at`) values (Merridie, Jerger, 20250802, 12000, 2025-01-25, Male, $2y$10$zpXvXzHcJbetdaRrUorJIOXu2RAqCXXI7LorHhcbNc1YE7VgMZhEG, 8, ?, 0, Apt 913, 16th Floor, 1970-01-01 01:00:00, 2025-12-16 15:21:07, 2025-12-16 15:21:07))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
+[2025-12-16 15:24:10] local.ERROR: Student Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '20250802' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`first_name`, `last_name`, `email`, `mobile`, `dob`, `gender`, `password`, `school_id`, `image`, `status`, `current_address`, `permanent_address`, `deleted_at`, `updated_at`, `created_at`) values (Merridie, Jerger, 20250802, 120900, 2025-01-25, Male, $2y$10$wTf2GZCf75Fs2Zv.vZh0qOTMGWTxGji7l.jmq2djhmomrjjHt.0eG, 8, ?, 0, Apt 913, 16th Floor, 1970-01-01 01:00:00, 2025-12-16 15:24:10, 2025-12-16 15:24:10))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
+[2025-12-16 15:27:51] local.ERROR: Student Controller -> Store Bulk method SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '20250802' for key 'users_email_unique' (Connection: school, SQL: insert into `users` (`first_name`, `last_name`, `email`, `mobile`, `dob`, `gender`, `password`, `school_id`, `image`, `status`, `current_address`, `permanent_address`, `deleted_at`, `updated_at`, `created_at`) values (Merridie, Jerger, 20250802, 34, 2025-01-25, Male, $2y$10$t362V0ZxvkjR0kfNtllLWezURKox3kBJ60EGrDeNRv9pesccTarLG, 8, ?, 0, Apt 913, 16th Floor, 1970-01-01 01:00:00, 2025-12-16 15:27:51, 2025-12-16 15:27:51))---> D:\AFRIGOTECH\SHULE ORIGINAL\shule_kiganjani_latest\vendor\laravel\framework\src\Illuminate\Database\Connection.php At Line : 824  
+[2025-12-17 11:04:00] local.INFO: Switched to database: shulekiganjani_saas8_afrigotech  
+[2025-12-17 11:04:00] local.INFO: User authenticated successfully. {"email":"athanaslink@gmail.com"} 
+
+
+
+[2025-12-17 16:10:58] local.ERROR: syntax error, unexpected token "}" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"}\" at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\routes\\web.php:728)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(511): Illuminate\\Routing\\RouteFileRegistrar->register()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(465): Illuminate\\Routing\\Router->loadRoutes()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\RouteRegistrar.php(194): Illuminate\\Routing\\Router->group()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\app\\Providers\\RouteServiceProvider.php(48): Illuminate\\Routing\\RouteRegistrar->group()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\RouteServiceProvider->App\\Providers\\{closure}()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#9 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(120): Illuminate\\Container\\Container->call()
+#10 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(45): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->loadRoutes()
+#11 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->Illuminate\\Foundation\\Support\\Providers\\{closure}()
+#12 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#13 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#14 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#15 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#16 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(119): Illuminate\\Container\\Container->call()
+#17 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1062): Illuminate\\Support\\ServiceProvider->callBootedCallbacks()
+#18 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1040): Illuminate\\Foundation\\Application->bootProvider()
+#19 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}()
+#20 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1039): array_walk()
+#21 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
+#22 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(286): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap()
+#23 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith()
+#24 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#25 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle()
+#26 {main}
+"} 
+[2025-12-17 16:11:01] local.ERROR: syntax error, unexpected token "}" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"}\" at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\routes\\web.php:728)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(511): Illuminate\\Routing\\RouteFileRegistrar->register()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(465): Illuminate\\Routing\\Router->loadRoutes()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\RouteRegistrar.php(194): Illuminate\\Routing\\Router->group()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\app\\Providers\\RouteServiceProvider.php(48): Illuminate\\Routing\\RouteRegistrar->group()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\RouteServiceProvider->App\\Providers\\{closure}()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#9 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(120): Illuminate\\Container\\Container->call()
+#10 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(45): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->loadRoutes()
+#11 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->Illuminate\\Foundation\\Support\\Providers\\{closure}()
+#12 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#13 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#14 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#15 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#16 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(119): Illuminate\\Container\\Container->call()
+#17 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1062): Illuminate\\Support\\ServiceProvider->callBootedCallbacks()
+#18 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1040): Illuminate\\Foundation\\Application->bootProvider()
+#19 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}()
+#20 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1039): array_walk()
+#21 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
+#22 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(286): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap()
+#23 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith()
+#24 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#25 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle()
+#26 {main}
+"} 
+[2025-12-17 16:11:01] local.ERROR: syntax error, unexpected token "}" {"exception":"[object] (ParseError(code: 0): syntax error, unexpected token \"}\" at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\routes\\web.php:728)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(511): Illuminate\\Routing\\RouteFileRegistrar->register()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(465): Illuminate\\Routing\\Router->loadRoutes()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\RouteRegistrar.php(194): Illuminate\\Routing\\Router->group()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\app\\Providers\\RouteServiceProvider.php(48): Illuminate\\Routing\\RouteRegistrar->group()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): App\\Providers\\RouteServiceProvider->App\\Providers\\{closure}()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#9 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(120): Illuminate\\Container\\Container->call()
+#10 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider.php(45): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->loadRoutes()
+#11 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Foundation\\Support\\Providers\\RouteServiceProvider->Illuminate\\Foundation\\Support\\Providers\\{closure}()
+#12 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#13 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(81): Illuminate\\Container\\Util::unwrapIfClosure()
+#14 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#15 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#16 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\ServiceProvider.php(119): Illuminate\\Container\\Container->call()
+#17 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1062): Illuminate\\Support\\ServiceProvider->callBootedCallbacks()
+#18 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1040): Illuminate\\Foundation\\Application->bootProvider()
+#19 [internal function]: Illuminate\\Foundation\\Application->Illuminate\\Foundation\\{closure}()
+#20 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1039): array_walk()
+#21 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Bootstrap\\BootProviders.php(17): Illuminate\\Foundation\\Application->boot()
+#22 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(286): Illuminate\\Foundation\\Bootstrap\\BootProviders->bootstrap()
+#23 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(447): Illuminate\\Foundation\\Application->bootstrapWith()
+#24 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(199): Illuminate\\Foundation\\Console\\Kernel->bootstrap()
+#25 Command line code(1): Illuminate\\Foundation\\Console\\Kernel->handle()
+#26 {main}
+"} 

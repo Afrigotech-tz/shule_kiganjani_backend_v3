@@ -122,7 +122,7 @@
                     <th>Fee Description</th>
                     <th>Pickup Point</th>
                     <th>Duration</th>
-                    <th>Amount (₹)</th>
+                    <th>Amount (TZS)</th>
                     <th>Mode</th>
                     @if($TransportationPayment->paymentTransaction->payment_gateway === 'cheque')
                         <th>Cheque number</th>
