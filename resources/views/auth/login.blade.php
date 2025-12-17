@@ -66,7 +66,7 @@
         <div class="container-fluid page-body-wrapper full-page-wrapper">
             <div class="content-wrapper login-d-flex align-items-center auth">
                 <div class="row flex-grow">
-                    <div class="col-xl-6 mx-auto auth-form-light p-4 m-4">
+                    <div class="col-xl-3 mx-auto auth-form-light p-2 m-3 rounded-lg shadow-sm bg-white ">
                         @if (env('DEMO_MODE'))
                             <div class="alert alert-info text-center" role="alert">
                                 NOTE : <a target="_blank" href="https://eschool-saas.afrigotech.me/login">-- Click Here --</a>
@@ -142,17 +142,17 @@
 
                                 @if ($school ?? '')
                                     <div class="form-group d-none">
-                                        <label for="school_code">{{ __('school_code') }}</label>
+                                        <label for="school_code">{{ __('school code') }}</label>
                                         <input id="school_code" type="text" class="form-control rounded-lg form-control-lg"
                                             name="code" value="{{ $school->code }}" autocomplete="school_code" autofocus
                                             placeholder="{{ __('school_code') }}">
                                     </div>
                                 @else
                                     <div class="form-group">
-                                        <label for="school_code">{{ __('school_code') }}</label>
+                                        <label for="school_code">{{ __('school code') }}</label>
                                         <input id="school_code" type="text" class="form-control rounded-lg form-control-lg"
                                             name="code" value="{{ old('school_code') }}" autocomplete="school_code"
-                                            autofocus placeholder="{{ __('school_code') }}">
+                                            autofocus placeholder="{{ __('school code') }}">
                                     </div>
                                 @endif
 
