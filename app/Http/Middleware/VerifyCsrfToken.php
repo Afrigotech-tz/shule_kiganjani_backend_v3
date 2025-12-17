@@ -13,14 +13,10 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'webhook/*',
-        'subscription/webhook/*',
-        'subscription/webhook/razorpay',
-        'subscription/webhook/stripe',
-        'subscription/webhook/paystack',
-        'subscription/webhook/flutterwave',
-        'payment/status',
-        'payment/cancel',
+        'webhook/fees/payments',
         'contact',
         'api/*'
     ];
+
 }
+

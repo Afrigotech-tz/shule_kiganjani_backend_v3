@@ -79,6 +79,9 @@ use App\Http\Controllers\DriverHelperController;
 use App\Http\Controllers\RouteVehicleController;
 use App\Http\Controllers\TransportationRequestController;
 use App\Http\Controllers\TransportationExpenseController;
+use App\Http\Controllers\Payments\FeeIpnController;
+use App\Http\Controllers\Payments\FeeControllnumberController;
+
 use App\Models\PaymentTransaction;
 use App\Models\Subscription;
 use App\Models\SubscriptionBill;
@@ -677,13 +680,13 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
         Route::resource('fees-type', FeesTypeController::class);
 
         Route::group(['prefix' => 'fees'], static function () {
+
             // Fees
             Route::put("/{id}/restore", [FeesController::class, 'restore'])->name('fees.restore');
             Route::delete("/{id}/delete", [FeesController::class, 'trash'])->name('fees.trash');
             Route::delete("/installment/{id}", [FeesController::class, 'deleteInstallment'])->name('fees.installment.delete');
             Route::delete("/class-type/{id}", [FeesController::class, 'deleteClassType'])->name('fees.class-type.delete');
             Route::get("/search", [FeesController::class, 'search'])->name('fees.search');
-
 
             // Fees Paid
             Route::get('/paid', [FeesController::class, 'feesPaidListIndex'])->name('fees.paid.index');
@@ -722,12 +725,16 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
             Route::post('/student-account-deactivate', [FeesController::class, 'studentAccountDeactivate'])->name('deactivate-student-account');
 
 
-            Route::post('/ipn/payments',[]);
+            Route::post('/generate-control-number', [FeeControllNumberController::class, 'generate'])->name('generate-control-number');
+            // Route::post('/payment/ipn', [PaymentIpnController::class, 'payments'])->name('ipn-fees');
+
 
            
         });
 
+
         Route::resource('fees', FeesController::class);
+
 
 
         // Online Exam
@@ -1014,18 +1021,25 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
 
 });
 
+
+
 // webhooks
-Route::post('webhook/razorpay', [WebhookController::class, 'razorpay']);
-Route::post('webhook/stripe', [WebhookController::class, 'stripe']);
-Route::post('webhook/paystack',[WebhookController::class,'paystack']);
-Route::post('webhook/flutterwave',[WebhookController::class, 'flutterwave']);
+// Route::post('webhook/razorpay', [WebhookController::class, 'razorpay']);
+// Route::post('webhook/stripe', [WebhookController::class, 'stripe']);
+// Route::post('webhook/paystack',[WebhookController::class,'paystack']);
+// Route::post('webhook/flutterwave',[WebhookController::class, 'flutterwave']);
+
 // Route::get('response/paystack/success', [WebhookController::class,'paystackSuccessCallback'])->name('paystack.success');
 // Route::get('response/flutterwave/success', [WebhookController::class,'flutterwaveSuccessCallback'])->name('flutterwave.success');
 
-Route::post('subscription/webhook/stripe', [SubscriptionWebhookController::class, 'stripe']);
-Route::post('subscription/webhook/razorpay', [SubscriptionWebhookController::class, 'razorpay']);
-Route::post('subscription/webhook/paystack', [SubscriptionWebhookController::class, 'paystack']);
-Route::post('subscription/webhook/flutterwave', [SubscriptionWebhookController::class, 'flutterwave']);
+// Route::post('subscription/webhook/stripe', [SubscriptionWebhookController::class, 'stripe']);
+// Route::post('subscription/webhook/razorpay', [SubscriptionWebhookController::class, 'razorpay']);
+// Route::post('subscription/webhook/paystack', [SubscriptionWebhookController::class, 'paystack']);
+// Route::post('subscription/webhook/flutterwave', [SubscriptionWebhookController::class, 'flutterwave']);
+
+
+//  IPN PAYMENTS 
+Route::post('webhook/fees/payments', [FeeIpnController::class, 'payments'])->name('ipn-fees');
 
 // Payment Routes for app
 Route::prefix('payment')->group(function () {
@@ -1209,4 +1223,5 @@ Route::get('demo-tokens', static function () {
         });
     }
 });
+
 

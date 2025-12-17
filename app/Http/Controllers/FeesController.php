@@ -633,6 +633,8 @@ class FeesController extends Controller
         }
     }
 
+    //  fee logs here is 
+
     public function feesTransactionsLogsIndex()
     {
         ResponseService::noFeatureThenRedirect('Fees Management');
@@ -645,6 +647,7 @@ class FeesController extends Controller
 
         return response(view('fees.fees_transaction_logs', compact('classes', 'mediums', 'session_year_all', 'months')));
     }
+
 
     public function feesTransactionsLogsList(Request $request)
     {
@@ -668,7 +671,9 @@ class FeesController extends Controller
                         $q->where('first_name', 'LIKE', "%$search%")->orwhere('last_name', 'LIKE', "%$search%");
                     });
             });
+
         }
+
 
         if (!empty($request->payment_status)) {
             $sql->where('payment_status', $request->payment_status);
@@ -696,6 +701,8 @@ class FeesController extends Controller
         }
         $bulkData['rows'] = $rows;
         return response()->json($bulkData);
+
+
     }
 
     /* START : Fees Paid Module */
@@ -810,7 +817,6 @@ class FeesController extends Controller
                 $fees_data['total_compulsory_fees_collected'] = $total_compulsory_fees_collected;
                 $fees_data['total_optional_fees_collected'] = $total_optional_fees_collected;
             }
-
 
 
             if ($request->paid_status == 0) {
@@ -942,6 +948,7 @@ class FeesController extends Controller
             }
             $bulkData['rows'] = $rows;
             return response()->json($bulkData);
+            
         }
 
 
