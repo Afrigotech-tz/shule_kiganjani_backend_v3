@@ -192,6 +192,8 @@
                                         data-align="center">{{ __('Date') }}</th>
                                     <th scope="col" data-field="paid_amount" data-sortable="false">
                                         {{ __('paid_amount') }}</th>
+                                    <th scope="col" data-field="control_number" data-sortable="false"
+                                        data-align="center">{{ __('Control Number') }}</th>
                                     <th scope="col" data-field="operate" data-sortable="false"
                                         data-events="feesPaidEvents" data-align="center" data-escape="false">
                                         {{ __('Action') }}

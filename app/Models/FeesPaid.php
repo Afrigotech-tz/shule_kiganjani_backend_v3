@@ -59,6 +59,13 @@ class FeesPaid extends Model
         return $this->hasMany(CompulsoryFee::class, 'fees_paid_id')->withTrashed();
     }
 
+    public function fee_control_number()
+    {
+        return $this->hasOne(FeeControlNumber::class, 'student_id', 'student_id')
+            ->where('fees_id', $this->fees_id)
+            ->where('fee_type', 'compulsory');
+    }
+
     /*It is used in Fees Receipt view file*/
 //    public function getCompulsoryDataAttribute() {
 //        if ($this->relationLoaded('compulsory_fee')) {

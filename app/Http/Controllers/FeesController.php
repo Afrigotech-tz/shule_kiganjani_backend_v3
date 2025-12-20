@@ -939,8 +939,10 @@ class FeesController extends Controller
                 if ($row->fees_paid) {
                     // $tempRow['paid_amount'] = $row->compulsory_fees_sum_amount + $row->compulsory_fees_sum_due_charges;
                     $tempRow['paid_amount'] = $row->compulsory_fees_sum_amount;
+                    $tempRow['control_number'] = $row->fees_paid->fee_control_number ? $row->fees_paid->fee_control_number->control_number : '';
                 } else {
                     $tempRow['paid_amount'] = 0;
+                    $tempRow['control_number'] = '';
                 }
                 if ($row->fees_paid && isset($row->fees_paid->compulsory_fee[0]->mode)) {
                     $tempRow['payment_method'] = $row->fees_paid->compulsory_fee[0]->mode;
