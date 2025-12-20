@@ -924,7 +924,10 @@ class FeesController extends Controller
                 if (!empty($row->fees_paid)) {
                     $operate .= ($fees->session_year_id == $sessionYearId) ? $operate : "";
                     $operate .= BootstrapTableService::button('fa fa-file-pdf-o', route('fees.paid.receipt.pdf', $row->fees_paid->id), ['btn', 'btn-xs', 'btn-gradient-info', 'btn-rounded', 'btn-icon', 'generate-paid-fees-pdf'], ['target' => "_blank", 'data-id' => $row->fees_paid->id, 'title' => trans('generate_pdf') . ' ' . trans('fees')]);
+                    $operate .= BootstrapTableService::button('fa fa-key', '#', ['btn', 'btn-xs', 'btn-gradient-primary', 'btn-rounded', 'btn-icon', 'generate-control-number'], ['data-id' => $row->fees_paid->id, 'data-student-id' => $row->id, 'data-fees-id' => $fees->id, 'data-amount' => $row->compulsory_fees_sum_amount, 'data-class-id' => $fees->class_id, 'data-session-year-id' => $sessionYearId, 'title' => trans('generate_control_number')]);
                     $tempRow['fees_status'] = $row->fees_paid->is_fully_paid;
+                } else {
+                    $operate .= BootstrapTableService::button('fa fa-key', '#', ['btn', 'btn-xs', 'btn-gradient-primary', 'btn-rounded', 'btn-icon', 'generate-control-number'], ['data-id' => '', 'data-student-id' => $row->id, 'data-fees-id' => $fees->id, 'data-amount' => $fees->total_compulsory_fees, 'data-class-id' => $fees->class_id, 'data-session-year-id' => $sessionYearId, 'title' => trans('generate_control_number')]);
                 }
 
                 // if (!empty($row->fees_paid->is_fully_paid)) {
@@ -948,13 +951,13 @@ class FeesController extends Controller
             }
             $bulkData['rows'] = $rows;
             return response()->json($bulkData);
-            
-        }
 
+        }
 
         $bulkData['total'] = 0;
         $bulkData['rows'] = $tempRow = [];
         return response()->json($bulkData);
+
     }
 
     public function feesPaidReceiptPDF($feesPaidId)
@@ -1223,7 +1226,7 @@ class FeesController extends Controller
     public function payOptionalFeesIndex($feesID, $studentID)
     {
         ResponseService::noFeatureThenRedirect('Fees Management');
-        //        ResponseService::noPermissionThenRedirect('fees-edit');
+        // ResponseService::noPermissionThenRedirect('fees-edit');
         // $fees = $this->fees->findById($feesID, ['*'], ['fees_class_type.fees_type:id,name', 'installments:id,name,due_date,due_charges,fees_id']);
 
         $fees = $this->fees->findById($feesID, ['*'], ['fees_class_type.fees_type:id,name', 'installments:id,name,due_date,due_charges,fees_id']);

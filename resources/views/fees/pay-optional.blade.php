@@ -59,6 +59,7 @@
                                             <td class="text-right" id="optional-total-amount"></td>
                                             {!! Form::hidden('total_amount',null, ["id" => "form-total-optional-amount"]) !!}
                                         </tr>
+                                        
                                         </tbody>
                                     </table>
                                 </div>
@@ -87,6 +88,21 @@
                                 <label for="cheque_no">{{ __('cheque_no') }} <span class="text-danger">*</span></label>
                                 <input type="number" id="cheque_no" name="cheque_no" placeholder="{{ __('cheque_no') }}" class="form-control cheque-no" required/>
                             </div>
+
+                            <!-- Control Number Section -->
+                            <div class="form-group online-mode-container" style="display: none">
+                                <label for="control_number">{{ __('Control Number') }}</label>
+                                <div class="input-group">
+                                    <input type="text" id="control_number" name="control_number" class="form-control" readonly placeholder="{{ __('Click Generate to get control number') }}">
+                                    <div class="input-group-append">
+                                        <button type="button" id="generate-control-btn" class="btn btn-outline-primary" disabled>
+                                            {{ __('Generate Control Number') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">{{ __('Generate control number before proceeding with online payment') }}</small>
+                            </div>
+
                             <input class="btn btn-theme float-right" type="submit" id="pay-button" disabled value={{ __('pay') }} />
                         </form>
                     </div>
@@ -110,11 +126,71 @@
                 $('#pay-button').removeAttr('disabled')
                 $('#optional-total-amount-to-pay').show().find('#optional-total-amount').html(totalAmount)
                 $('#optional-total-amount-to-pay').show().find('#form-total-optional-amount').val(totalAmount)
+                // Enable generate control button if online mode is selected
+                if ($('input[name="mode"]:checked').val() == '3') {
+                    $('#generate-control-btn').removeAttr('disabled')
+                }
             } else {
                 $('#pay-button').attr('disabled', true)
                 $('#optional-total-amount-to-pay').hide().find('#optional-total-amount').html(totalAmount)
                 $('#optional-total-amount-to-pay').hide().find('#form-total-optional-amount').val(totalAmount)
+                $('#generate-control-btn').attr('disabled', true)
             }
+        })
+
+        // Handle payment mode changes
+        $('input[name="mode"]').on('change', function () {
+            const mode = $(this).val()
+            if (mode == '2') { // cheque
+                $('.cheque-no-container').show()
+                $('.online-mode-container').hide()
+                $('#generate-control-btn').attr('disabled', true)
+            } else if (mode == '3') { // online
+                $('.cheque-no-container').hide()
+                $('.online-mode-container').show()
+                if (totalAmount > 0) {
+                    $('#generate-control-btn').removeAttr('disabled')
+                }
+            } else { // cash
+                $('.cheque-no-container').hide()
+                $('.online-mode-container').hide()
+                $('#generate-control-btn').attr('disabled', true)
+            }
+        })
+
+        // Handle control number generation
+        $('#generate-control-btn').on('click', function () {
+            const btn = $(this)
+            const originalText = btn.html()
+
+            btn.html('<i class="fa fa-spinner fa-spin"></i> Generating...').attr('disabled', true)
+
+            $.ajax({
+                url: '{{ route("generate_control_number") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    fees_id: $('#optional-fees-id').val(),
+                    student_id: $('#student-id').val(),
+                    class_id: $('#class-id').val(),
+                    session_year_id: '{{ $student->student->session_year_id }}',
+                    amount: totalAmount
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#control_number').val(response.control_number)
+                        btn.html('<i class="fa fa-check"></i> Generated').removeClass('btn-outline-primary').addClass('btn-success')
+                        toastr.success(response.message)
+                    } else {
+                        toastr.error(response.message || 'Failed to generate control number')
+                        btn.html(originalText).attr('disabled', false)
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('Failed to generate control number. Please try again.')
+                    btn.html(originalText).attr('disabled', false)
+                }
+            })
         })
 
         function formSuccessFunction() {

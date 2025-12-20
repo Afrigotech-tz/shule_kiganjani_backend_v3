@@ -33,8 +33,8 @@ class FeeIpnController extends Controller
             \Log::info('Payment data saved on the new Switched Database: ' . DB::connection('school')->getDatabaseName());
 
         }
-        
 
+        
 
     }
 

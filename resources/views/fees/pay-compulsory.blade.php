@@ -1,4 +1,4 @@
-@extends('layouts.master')
+ @extends('layouts.master')
 
 @section('title')
     {{ __('Pay Compulsory Fees') }}
@@ -213,7 +213,6 @@
                                         </tr>
                                         @endif
                                         
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -236,6 +235,12 @@
                                                     {{ __('cheque') }}
                                                 </label>
                                             </div>
+                                            <div class="form-check form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" name="mode" class="online-compulsory-mode mode" value="3">
+                                                    {{ __('online') }}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +248,9 @@
                                     <label for="cheque_no">{{ __('cheque_no') }} <span class="text-danger">*</span></label>
                                     <input type="number" id="cheque_no" name="cheque_no" placeholder="{{ __('cheque_no') }}" class="form-control cheque-no" required/>
                                 </div>
-                                <input class="btn btn-theme float-right" type="submit" value={{ __('pay') }} />
+                                <input class="btn btn-theme float-right" type="submit" value={{ __('pay') }} /> <br>
+
+
                             @endif
                             
                         </form>
@@ -267,7 +274,6 @@
         }, 1000);
         @endif
         
-
         // @if($student->fees_paid && $student->fees_paid->is_used_installment)
         // $('.pay-in-installment').trigger('click').attr("disabled", true);
         // @endif
@@ -276,8 +282,88 @@
         $('.pay-in-installment').trigger('click').attr("disabled", true);
         @endif
 
+        // Handle payment mode changes
+        $('input[name="mode"]').on('change', function () {
+            const mode = $(this).val()
+            if (mode == '2') { // cheque
+                $('.cheque-no-container').show()
+                $('.online-mode-container').hide()
+                $('#generate-control-btn').attr('disabled', true)
+            } else if (mode == '3') { // online
+                $('.cheque-no-container').hide()
+                $('.online-mode-container').show()
+                // Calculate total amount for control number generation
+                let totalAmount = 0
+                if ($('.pay-in-installment').is(':checked')) {
+                    $('.installment-checkbox:checked').each(function() {
+                        totalAmount += parseFloat($(this).data('amount'))
+                    })
+                } else {
+                    totalAmount = parseFloat($('#total_compulsory_fees').val())
+                }
+                if (totalAmount > 0) {
+                    $('#generate-control-btn').removeAttr('disabled')
+                }
+
+            } else { // cash
+                $('.cheque-no-container').hide()
+                $('.online-mode-container').hide()
+                $('#generate-control-btn').attr('disabled', true)
+            }
+
+
+        })
+
+        // Handle control number generation
+        $('#generate-control-btn').on('click', function () {
+            const btn = $(this)
+            const originalText = btn.html()
+
+            btn.html('<i class="fa fa-spinner fa-spin"></i> Generating...').attr('disabled', true)
+
+            // Calculate total amount
+            let totalAmount = 0
+            if ($('.pay-in-installment').is(':checked')) {
+                $('.installment-checkbox:checked').each(function() {
+                    totalAmount += parseFloat($(this).data('amount'))
+                })
+            } else {
+                totalAmount = parseFloat($('#total_compulsory_fees').val())
+            }
+
+            $.ajax({
+                url: '{{ route("generate_control_number") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    fees_id: $('#compulsory-fees-id').val(),
+                    student_id: $('#student-id').val(),
+                    class_id: '{{ $student->student->class_section->class_id }}',
+                    session_year_id: '{{ $student->student->session_year_id }}',
+                    amount: totalAmount
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#control_number').val(response.control_number)
+                        btn.html('<i class="fa fa-check"></i> Generated').removeClass('btn-outline-primary').addClass('btn-success')
+                        toastr.success(response.message)
+                    } else {
+                        toastr.error(response.message || 'Failed to generate control number')
+                        btn.html(originalText).attr('disabled', false)
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('Failed to generate control number. Please try again.')
+                    btn.html(originalText).attr('disabled', false)
+                }
+            })
+        })
+
         function successFunction() {
             window.location.href = "{{route('fees.paid.index')}}";
         }
+
     </script>
 @endsection
+
+

@@ -725,13 +725,14 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
             Route::post('/student-account-deactivate', [FeesController::class, 'studentAccountDeactivate'])->name('deactivate-student-account');
 
 
-            Route::post('/generate-control-number', [FeeControllNumberController::class, 'generate'])->name('generate-control-number');
+            Route::post('/generate-control-number', [FeeControllNumberController::class, 'generate'])->name('generate_control_number');
             // Route::post('/payment/ipn', [PaymentIpnController::class, 'payments'])->name('ipn-fees');
 
 
            
         });
 
+        
 
         Route::resource('fees', FeesController::class);
 
@@ -1024,20 +1025,6 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
 
 
 // webhooks
-// Route::post('webhook/razorpay', [WebhookController::class, 'razorpay']);
-// Route::post('webhook/stripe', [WebhookController::class, 'stripe']);
-// Route::post('webhook/paystack',[WebhookController::class,'paystack']);
-// Route::post('webhook/flutterwave',[WebhookController::class, 'flutterwave']);
-
-// Route::get('response/paystack/success', [WebhookController::class,'paystackSuccessCallback'])->name('paystack.success');
-// Route::get('response/flutterwave/success', [WebhookController::class,'flutterwaveSuccessCallback'])->name('flutterwave.success');
-
-// Route::post('subscription/webhook/stripe', [SubscriptionWebhookController::class, 'stripe']);
-// Route::post('subscription/webhook/razorpay', [SubscriptionWebhookController::class, 'razorpay']);
-// Route::post('subscription/webhook/paystack', [SubscriptionWebhookController::class, 'paystack']);
-// Route::post('subscription/webhook/flutterwave', [SubscriptionWebhookController::class, 'flutterwave']);
-
-
 //  IPN PAYMENTS 
 Route::post('webhook/fees/payments', [FeeIpnController::class, 'payments'])->name('ipn-fees');
 
