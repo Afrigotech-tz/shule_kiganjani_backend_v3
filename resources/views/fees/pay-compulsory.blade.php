@@ -248,7 +248,23 @@
                                     <label for="cheque_no">{{ __('cheque_no') }} <span class="text-danger">*</span></label>
                                     <input type="number" id="cheque_no" name="cheque_no" placeholder="{{ __('cheque_no') }}" class="form-control cheque-no" required/>
                                 </div>
-                                <input class="btn btn-theme float-right" type="submit" value={{ __('pay') }} /> <br>
+                            @if (!$isFullyPaid)
+                                <!-- Control Number Section -->
+                                <div class="form-group online-mode-container" style="display: none">
+                                    <label for="control_number">{{ __('Control Number') }}</label>
+                                    <div class="input-group">
+                                        <input type="text" id="control_number" name="control_number" class="form-control" readonly placeholder="{{ __('Click Generate to get control number') }}">
+                                        <div class="input-group-append">
+                                            <button type="button" id="generate-control-btn" class="btn btn-outline-primary" disabled>
+                                                {{ __('Generate Control Number') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">{{ __('Generate control number before proceeding with online payment') }}</small>
+                                </div>
+                            @endif
+
+                            <input class="btn btn-theme float-right" type="submit" value={{ __('pay') }} /> <br>
 
 
                             @endif
@@ -340,7 +356,8 @@
                     student_id: $('#student-id').val(),
                     class_id: '{{ $student->student->class_section->class_id }}',
                     session_year_id: '{{ $student->student->session_year_id }}',
-                    amount: totalAmount
+                    amount: totalAmount,
+                    fee_type: 'compulsory'
                 },
                 success: function (response) {
                     if (response.success) {

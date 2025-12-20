@@ -265,7 +265,8 @@
                     student_name: studentName,
                     class_id: classId,
                     session_year_id: sessionYearId,
-                    amount: amount
+                    amount: amount,
+                    fee_type: 'compulsory'
                 },
                 success: function(response) {
                     if (response.success) {

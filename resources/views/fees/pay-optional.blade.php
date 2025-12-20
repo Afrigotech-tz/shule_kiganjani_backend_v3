@@ -174,7 +174,8 @@
                     student_id: $('#student-id').val(),
                     class_id: $('#class-id').val(),
                     session_year_id: '{{ $student->student->session_year_id }}',
-                    amount: totalAmount
+                    amount: totalAmount,
+                    fee_type: 'optional'
                 },
                 success: function (response) {
                     if (response.success) {

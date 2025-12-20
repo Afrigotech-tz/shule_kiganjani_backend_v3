@@ -1024,13 +1024,12 @@ class FeesController extends Controller
                     $q->where('fees_id', $feesID)->withSum('compulsory_fee', 'amount')->with('compulsory_fee');
                 },
                 'compulsory_fees.advance_fees'
-            ])->findOrFail($studentID);
+        ])->findOrFail($studentID);
 
 
         $isFullyPaid = false;
         if (!empty($student->fees_paid) && $student->fees_paid->is_fully_paid) {
-            ResponseService::successRedirectResponse(route('fees.paid.index'), 'Compulsory Fees Already Paid');
-            $isFullyPaid = true;
+            return ResponseService::successRedirectResponse(route('fees.paid.index'), 'Compulsory Fees Already Paid');
         }
         $installment_status = 0;
         if (count($fees->installments) > 0) {

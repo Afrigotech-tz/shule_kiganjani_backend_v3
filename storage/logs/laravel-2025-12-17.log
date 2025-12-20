@@ -1,0 +1,37 @@
+[2025-12-17 16:30:38] local.INFO: Detected N+1 Query  
+[2025-12-17 16:30:38] local.INFO: Model: App\Models\FeesPaid
+Relation: compulsory_fee
+Num-Called: 2
+Call-Stack:
+#19 /app/Http/Controllers/FeesController.php:936
+#20 /vendor/laravel/framework/src/Illuminate/Routing/Controller.php:54
+#21 /vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php:43
+#22 /vendor/laravel/framework/src/Illuminate/Routing/Route.php:259
+#23 /vendor/laravel/framework/src/Illuminate/Routing/Route.php:205
+#24 /vendor/laravel/framework/src/Illuminate/Routing/Router.php:806
+#25 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:144
+#26 /app/Http/Middleware/CheckTwoFactorAuthenticated.php:40
+#27 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#28 /app/Http/Middleware/CheckForMaintenanceMode.php:32
+#29 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#30 /app/Http/Middleware/MustVerifyEmail.php:33
+#31 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#32 /app/Http/Middleware/SwitchDatabase.php:32
+#33 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#34 /app/Http/Middleware/Status.php:42
+#35 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#36 /app/Http/Middleware/CheckSchoolStatus.php:105
+#37 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#38 /app/Http/Middleware/CheckRole.php:38
+#39 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#40 /vendor/barryvdh/laravel-debugbar/src/Middleware/InjectDebugbar.php:66
+#41 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#42 /app/Http/Middleware/WizardSettings.php:29
+#43 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#44 /app/Http/Middleware/LanguageManager.php:61
+#45 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#46 /app/Http/Middleware/DemoMiddleware.php:68
+#47 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+#48 /vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php:50
+#49 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php:183
+  

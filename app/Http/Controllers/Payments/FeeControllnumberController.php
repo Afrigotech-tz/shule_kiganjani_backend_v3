@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payments;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentTransaction;
+use App\Models\FeeControlNumber;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ class FeeControllnumberController extends Controller
                 'amount' => 'required|numeric|min:1',
                 'class_id' => 'required|integer',
                 'session_year_id' => 'required|integer',
+                'fee_type' => 'required|in:compulsory,optional',
             ]);
 
             // Get school database connection if needed
@@ -69,10 +71,31 @@ class FeeControllnumberController extends Controller
             ]);
             
 
-            if ($controlNumber) {
+            if ($controlNumber && isset($controlNumber['control_number'])) {
+                $controlNumberString = $controlNumber['control_number'];
+
+                // Create FeeControlNumber record with gateway response
+                FeeControlNumber::create([
+                    'school_id' => auth()->user()->school_id ?? 1,
+                    'student_id' => $request->student_id,
+                    'fees_id' => $request->fees_id,
+                    'fee_type' => $request->fee_type,
+                    'class_id' => $request->class_id,
+                    'session_year_id' => $request->session_year_id,
+                    'control_number' => $controlNumberString,
+                    'amount_required' => $request->amount,
+                    'amount_paid' => 0,
+                    'balance' => $request->amount,
+                    'status' => 'PENDING',
+                    'payload' => json_encode($controlNumber), // Store the full gateway response as JSON
+                    'gateway_created_at' => now()
+                ]);
+
                 $paymentTransaction->update([
                     'control_number' => $controlNumber,
-                    'request_id' => 'REQ-' . time() . '-' . $request->student_id
+                    'request_id' => 'REQ-' . time() . '-' . $request->student_id,
+                    'fee_type' => $request->fee_type,
+                    'fees_id' => $request->fees_id
                 ]);
 
                 DB::commit();
@@ -129,15 +152,18 @@ class FeeControllnumberController extends Controller
 
             if ($response->successful()) {
                 $responseData = $response->json();
-                return $responseData['control_number'] ?? null;
+                return $responseData;
             } else {
                 Log::error('Payment gateway API error: ' . $response->body());
                 return null;
             }
+
         } catch (\Exception $e) {
             Log::error('Payment gateway API call failed: ' . $e->getMessage());
             return null;
         }
+
+
     }
 
     private function switchToSchoolDatabase($schoolCode)
@@ -155,4 +181,8 @@ class FeeControllnumberController extends Controller
             DB::setDefaultConnection('school');
         }
     }
+
+
 }
+
+
