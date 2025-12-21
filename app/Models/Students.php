@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\SessionYearsTracking;
 use App\Repositories\StudentSubject\StudentSubjectInterface;
 use App\Services\CachingService;
+use App\Traits\DateFormatTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use App\Models\SessionYearsTracking;
-use App\Traits\DateFormatTrait;
 
 class Students extends Model
 {
@@ -31,6 +31,7 @@ class Students extends Model
         'join_session_year_id',
         'leave_session_year_id'
     ];
+
     protected $appends = ['first_name', 'last_name', 'full_name'];
 
     public function scopeOwner($query)
@@ -51,7 +52,8 @@ class Students extends Model
                 $cache = app(CachingService::class);
                 $query->with([
                     'session_years_trackings' => function ($q) use ($cache) {
-                        $q->where('modal_type', 'App\Models\Students')
+                        $q
+                            ->where('modal_type', 'App\Models\Students')
                             ->where('session_year_id', $cache->getDefaultSessionYear()->id);
                     }
                 ]);
@@ -89,7 +91,7 @@ class Students extends Model
         $class_section_id = $this->class_section->id;
         $core_subjects = $this->class_section->class->core_subjects;
         $elective_subject_count = $this->class_section->class->elective_subject_groups->count();
-        $elective_subjects = $studentSubject->builder()->where('student_id', $this->user_id)->where('class_section_id', $class_section_id)->select("subject_id")->with('subject')->get();
+        $elective_subjects = $studentSubject->builder()->where('student_id', $this->user_id)->where('class_section_id', $class_section_id)->select('subject_id')->with('subject')->get();
         $response = array(
             'core_subject' => $core_subjects
         );
@@ -101,7 +103,6 @@ class Students extends Model
 
     public function currentSemesterSubjects()
     {
-
         if (request('student_id')) {
             $student = $this->where('user_id', request('student_id'))->first();
         } else {
@@ -112,7 +113,7 @@ class Students extends Model
         $cache = app(CachingService::class);
         $currentSemester = $cache->getDefaultSemesterData($student->school_id);
         // dd($this->toArray());
-//        $class_id = $this->class_section->class->id;
+        //        $class_id = $this->class_section->class->id;
         $class_section_id = $student->class_section->id;
         $core_subjects = $student->class_section->class->core_subjects()->where(function ($query) use ($currentSemester) {
             (isset($currentSemester) && !empty($currentSemester)) ? $query->where('semester_id', $currentSemester->id)->orWhereNull('semester_id') : $query->orWhereNull('semester_id');
@@ -122,7 +123,7 @@ class Students extends Model
             (isset($currentSemester) && !empty($currentSemester)) ? $query->where('semester_id', $currentSemester->id)->orWhereNull('semester_id') : $query->orWhereNull('semester_id');
         })->count();
         // dd($elective_subject_count);
-        $elective_subjects = $studentSubject->builder()->where('student_id', $student->user_id)->where('class_section_id', $class_section_id)->select("class_subject_id")->with('class_subject.subject')->get();
+        $elective_subjects = $studentSubject->builder()->where('student_id', $student->user_id)->where('class_section_id', $class_section_id)->select('class_subject_id')->with('class_subject.subject')->get();
         // dd($elective_subjects->toArray());
         $response = array(
             'core_subject' => $core_subjects
@@ -130,7 +131,7 @@ class Students extends Model
         if ($elective_subject_count > 0) {
             $response['elective_subject'] = $elective_subjects;
         }
-        //dd($response);
+        // dd($response);
         return $response;
     }
 
@@ -154,41 +155,53 @@ class Students extends Model
         return ['core_subject' => $core_subjects, 'elective_subject_group' => $elective_subjects];
     }
 
-
     public function guardian()
     {
         return $this->belongsTo(User::class, 'guardian_id')->withTrashed();
     }
 
     //    public function scopeOfTeacher($query) {
-//        $user = Auth::user();
-//        if ($user->hasRole('Teacher')) {
-//            // for teacher list
-//            $class_teacher = $user->teacher->class_section;
-//            $class_section_id = array();
-//            if ($class_teacher) {
-//                $class_section_id[] = array($class_teacher->class_section_id);
-//            }
-//            $subject_teachers = $user->teacher->subjects;
-//            if ($subject_teachers) {
-//                foreach ($subject_teachers as $subject_teacher) {
-//                    $class_section_id[] = array($subject_teacher->class_section_id);
-//                }
-//            }
-//            return $query->whereIn('class_section_id', $class_section_id);
-//        }
-//
-//        // for admin list
-//        return $query;
-//        //return if it doesn't affect above conditions
-////        return $query->where('class_section_id', 0);
-//    }
+    //        $user = Auth::user();
+    //        if ($user->hasRole('Teacher')) {
+    //            // for teacher list
+    //            $class_teacher = $user->teacher->class_section;
+    //            $class_section_id = array();
+    //            if ($class_teacher) {
+    //                $class_section_id[] = array($class_teacher->class_section_id);
+    //            }
+    //            $subject_teachers = $user->teacher->subjects;
+    //            if ($subject_teachers) {
+    //                foreach ($subject_teachers as $subject_teacher) {
+    //                    $class_section_id[] = array($subject_teacher->class_section_id);
+    //                }
+    //            }
+    //            return $query->whereIn('class_section_id', $class_section_id);
+    //        }
+    //
+    //        // for admin list
+    //        return $query;
+    //        //return if it doesn't affect above conditions
+    // //        return $query->where('class_section_id', 0);
+    //    }
 
     public function fees_paid()
     {
         return $this->hasMany(FeesPaid::class, 'student_id')->withTrashed();
     }
 
+    public function fee_control_number()
+    {
+        // We link fee_control_numbers.student_id to students.user_id
+        return $this->hasOne(FeeControlNumber::class, 'student_id', 'user_id');
+    }
+
+    // public function fee_control_number()
+    // {
+    //     return $this
+    //         ->hasOne(FeeControlNumber::class, 'student_id', 'student_id')
+    //         ->where('fees_id', $this->fees_id)
+    //         ->where('fee_type', 'compulsory');
+    // }
 
     public function getFirstNameAttribute()
     {
@@ -198,6 +211,7 @@ class Students extends Model
         }
         return $firstName;
     }
+
     public function getLastNameAttribute()
     {
         $lastName = '';
@@ -206,6 +220,7 @@ class Students extends Model
         }
         return $lastName;
     }
+
     public function getFullNameAttribute()
     {
         $fullName = '';
@@ -285,8 +300,7 @@ class Students extends Model
     public function getCreatedAtAttribute()
     {
         return $this->formatDateValue($this->getRawOriginal('created_at'));
-    }   
-
+    }
 
     public function getUpdatedAtAttribute()
     {
@@ -302,5 +316,4 @@ class Students extends Model
     {
         return $this->hasOne(PromoteStudent::class, 'student_id', 'user_id');
     }
-
 }

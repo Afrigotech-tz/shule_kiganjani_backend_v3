@@ -88,4 +88,5 @@ class FeeControlNumber extends Model
     {
         return $this->formatDateValue($this->getRawOriginal('updated_at'));
     }
+    
 }

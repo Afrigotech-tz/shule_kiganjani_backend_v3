@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function boot()
     {
         parent::boot();
-        static::deleting(static function ($user) { // before delete() method call this
+        static::deleting(static function ($user) {  // before delete() method call this
             if ($user->isForceDeleting() && $user->getRawOriginal('image') && Storage::disk('public')->exists($user->getRawOriginal('image'))) {
                 Storage::disk('public')->delete($user->getRawOriginal('image'));
             }
@@ -105,7 +105,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function timetable()
     {
-
         return $this->hasManyThrough(Timetable::class, SubjectTeacher::class, 'teacher_id', 'subject_teacher_id');
     }
 
@@ -130,14 +129,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     //    public function guardianRelationChild() {
-//        return $this->hasMany(Students::class, 'guardian_id');
-//    }
+    //        return $this->hasMany(Students::class, 'guardian_id');
+    //    }
 
     public function scopeOwner($query)
     {
         if (Auth::user()) {
             if (Auth::user()->school_id) {
-
                 if (Auth::user()->hasRole('School Admin')) {
                     return $query->where('school_id', Auth::user()->school_id);
                 }
@@ -163,7 +161,6 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
 
-
         return $query;
     }
 
@@ -177,8 +174,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(StaffSupportSchool::class, 'user_id', 'id');
     }
 
-
-    //Getter Attributes
+    // Getter Attributes
     public function getImageAttribute($value)
     {
         if ($value) {
@@ -192,7 +188,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->first_name . ' ' . $this->last_name;
     }
 
-
     public function guardianRelationChild()
     {
         return $this->hasMany(Students::class, 'guardian_id');
@@ -203,12 +198,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Students::class, 'guardian_id')->withTrashed();
     }
 
-
     public function teacher()
     {
         return $this->hasOne(Staff::class);
     }
-
 
     public function fees_paids()
     {
@@ -230,6 +223,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(CompulsoryFee::class, 'student_id')->withTrashed();
     }
 
+
+    public function fee_control_number()
+    {
+        return $this->hasOne(FeeControlNumber::class, 'student_id', 'student_id');
+    }
+
     public function features()
     {
         // Current active features set to sidebar menu
@@ -239,20 +238,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return array_merge($addons, $subscription);
     }
 
+
     public function exam_result()
     {
         return $this->hasMany(ExamResult::class, 'student_id', 'id');
     }
-
+    
     public function exam_marks()
     {
         return $this->hasMany(ExamMarks::class, 'student_id', 'id');
     }
 
+
     public function marks()
     {
         return $this->hasMany(ExamMarks::class, 'student_id', 'id');
     }
+
 
     public function online_exam_attempts()
     {
@@ -263,6 +265,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->attributes['dob'] = date('Y-m-d', strtotime($value));
     }
+
 
     public function extra_student_details()
     {
@@ -297,7 +300,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return collect($subjects);
     }
 
-
     public function currentSemesterClassSubjects()
     {
         $cache = app(CachingService::class);
@@ -320,6 +322,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(UserStatusForNextCycle::class);
     }
+
     public function getSchoolIdAttribute($value)
     {
         if (!empty($value)) {
@@ -342,7 +345,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if ($this->relationLoaded('support_school')) {
             $schools = $this->support_school->pluck('school.name')->toArray();
-            return implode(", ", $schools);
+            return implode(', ', $schools);
         }
         return '';
     }
