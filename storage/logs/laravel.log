@@ -5699,3 +5699,92 @@
 [2025-12-21 17:17:43] local.INFO: RECEIVED FEES IPN DATA: {"all_data":{"id":70,"balance":1500000,"school_code":"S20251","control_number":"99613103289579","order_id":null,"student_id":"53","student_name":"Stanton Carlisle","amount_required":"1500000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T14:17:37.850493Z","school":1}} 
 [2025-12-21 17:17:43] local.INFO: Processing IPN on school database: shulekiganjani_saas8_afrigotech  
 [2025-12-21 17:17:43] local.ERROR: IPN processing failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'control_number' in 'WHERE' (Connection: school, SQL: select * from `payment_transactions` where `control_number` = 99613103289579 limit 1)  
+[2025-12-21 17:44:12] local.ERROR: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'control_number' (Connection: mysql, SQL: alter table `payment_transactions` add `control_number` varchar(191) null after `payment_id`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S21): SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'control_number' (Connection: mysql, SQL: alter table `payment_transactions` add `control_number` varchar(191) null after `payment_id`) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:829)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(576): Illuminate\\Database\\Connection->run()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(110): Illuminate\\Database\\Connection->statement()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(602): Illuminate\\Database\\Schema\\Blueprint->build()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(444): Illuminate\\Database\\Schema\\Builder->build()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Illuminate\\Database\\Schema\\Builder->table()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\database\\migrations\\2025_12_21_173311_add_control_number_to_payment_transactions_table.php(13): Illuminate\\Support\\Facades\\Facade::__callStatic()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(501): Illuminate\\Database\\Migrations\\Migration@anonymous->up()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(418): Illuminate\\Database\\Migrations\\Migrator->runMethod()
+#9 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(427): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#10 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(224): Illuminate\\Database\\Migrations\\Migrator->runMigration()
+#11 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\View\\Components\\Task.php(37): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#12 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(783): Illuminate\\Console\\View\\Components\\Task->render()
+#13 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(224): Illuminate\\Database\\Migrations\\Migrator->write()
+#14 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(189): Illuminate\\Database\\Migrations\\Migrator->runUp()
+#15 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(132): Illuminate\\Database\\Migrations\\Migrator->runPending()
+#16 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(90): Illuminate\\Database\\Migrations\\Migrator->run()
+#17 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(641): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(83): Illuminate\\Database\\Migrations\\Migrator->usingConnection()
+#19 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#22 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#23 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#24 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#25 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute()
+#26 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#27 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(1088): Illuminate\\Console\\Command->run()
+#28 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#29 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#30 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#31 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#32 {main}
+
+[previous exception] [object] (PDOException(code: 42S21): SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'control_number' at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:587)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(587): PDOStatement->execute()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(816): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(783): Illuminate\\Database\\Connection->runQueryCallback()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(576): Illuminate\\Database\\Connection->run()
+#4 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(110): Illuminate\\Database\\Connection->statement()
+#5 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(602): Illuminate\\Database\\Schema\\Blueprint->build()
+#6 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(444): Illuminate\\Database\\Schema\\Builder->build()
+#7 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(355): Illuminate\\Database\\Schema\\Builder->table()
+#8 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\database\\migrations\\2025_12_21_173311_add_control_number_to_payment_transactions_table.php(13): Illuminate\\Support\\Facades\\Facade::__callStatic()
+#9 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(501): Illuminate\\Database\\Migrations\\Migration@anonymous->up()
+#10 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(418): Illuminate\\Database\\Migrations\\Migrator->runMethod()
+#11 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(427): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#12 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(224): Illuminate\\Database\\Migrations\\Migrator->runMigration()
+#13 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\View\\Components\\Task.php(37): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#14 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(783): Illuminate\\Console\\View\\Components\\Task->render()
+#15 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(224): Illuminate\\Database\\Migrations\\Migrator->write()
+#16 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(189): Illuminate\\Database\\Migrations\\Migrator->runUp()
+#17 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(132): Illuminate\\Database\\Migrations\\Migrator->runPending()
+#18 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(90): Illuminate\\Database\\Migrations\\Migrator->run()
+#19 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(641): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#20 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(83): Illuminate\\Database\\Migrations\\Migrator->usingConnection()
+#21 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#22 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#23 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#24 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#25 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(662): Illuminate\\Container\\BoundMethod::call()
+#26 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(211): Illuminate\\Container\\Container->call()
+#27 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Command\\Command.php(326): Illuminate\\Console\\Command->execute()
+#28 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run()
+#29 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(1088): Illuminate\\Console\\Command->run()
+#30 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand()
+#31 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#32 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#33 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#34 {main}
+"} 
+[2025-12-21 18:06:55] local.INFO: Sending data to control number generation API {"amount":"750000","student_id":"63","student_name":"Eadmund Sturges","fees_id":"2","order_id":"ORD-1766329615-63","school_code":"S20251"} 
+[2025-12-21 18:07:00] local.INFO: Control number generated successfully {"payment_id":71,"control_number":{"id":71,"balance":750000,"school_code":"S20251","control_number":"99613502452145","order_id":null,"student_id":"63","student_name":"Eadmund Sturges","amount_required":"750000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:06:55.502638Z","school":1},"student_id":"63"} 
+[2025-12-21 18:07:00] local.INFO: RECEIVED FEES IPN DATA: {"all_data":{"id":71,"balance":750000,"school_code":"S20251","control_number":"99613502452145","order_id":null,"student_id":"63","student_name":"Eadmund Sturges","amount_required":"750000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:06:55.502638Z","school":1}} 
+[2025-12-21 18:07:00] local.INFO: Processing IPN on school database: shulekiganjani_saas8_afrigotech  
+[2025-12-21 18:07:01] local.ERROR: IPN processing failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'control_number' in 'WHERE' (Connection: school, SQL: select * from `payment_transactions` where `control_number` = 99613502452145 limit 1)  
+[2025-12-21 18:08:30] local.INFO: Sending data to control number generation API {"amount":"1500000","student_id":"59","student_name":"Nils Bewicke","fees_id":"2","order_id":"ORD-1766329710-59","school_code":"S20251"} 
+[2025-12-21 18:08:35] local.INFO: Control number generated successfully {"payment_id":72,"control_number":{"id":72,"balance":1500000,"school_code":"S20251","control_number":"99613565388577","order_id":null,"student_id":"59","student_name":"Nils Bewicke","amount_required":"1500000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:08:30.335392Z","school":1},"student_id":"59"} 
+[2025-12-21 18:08:35] local.INFO: RECEIVED FEES IPN DATA: {"all_data":{"id":72,"balance":1500000,"school_code":"S20251","control_number":"99613565388577","order_id":null,"student_id":"59","student_name":"Nils Bewicke","amount_required":"1500000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:08:30.335392Z","school":1}} 
+[2025-12-21 18:08:35] local.INFO: Processing IPN on school database: shulekiganjani_saas8_afrigotech  
+[2025-12-21 18:08:35] local.ERROR: IPN processing failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'control_number' in 'WHERE' (Connection: school, SQL: select * from `payment_transactions` where `control_number` = 99613565388577 limit 1)  
+[2025-12-21 18:08:40] local.INFO: Sending data to control number generation API {"amount":"1500000","student_id":"55","student_name":"Myrtia Stayte","fees_id":"2","order_id":"ORD-1766329720-55","school_code":"S20251"} 
+[2025-12-21 18:08:45] local.INFO: Control number generated successfully {"payment_id":73,"control_number":{"id":73,"balance":1500000,"school_code":"S20251","control_number":"99613628650855","order_id":null,"student_id":"55","student_name":"Myrtia Stayte","amount_required":"1500000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:08:40.218201Z","school":1},"student_id":"55"} 
+[2025-12-21 18:08:45] local.INFO: RECEIVED FEES IPN DATA: {"all_data":{"id":73,"balance":1500000,"school_code":"S20251","control_number":"99613628650855","order_id":null,"student_id":"55","student_name":"Myrtia Stayte","amount_required":"1500000.00","amount_paid":"0.00","add_amount":"0.00","status":"PENDING","created_at":"2025-12-21T15:08:40.218201Z","school":1}} 
+[2025-12-21 18:08:45] local.INFO: Processing IPN on school database: shulekiganjani_saas8_afrigotech  
+[2025-12-21 18:08:45] local.ERROR: IPN processing failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'control_number' in 'WHERE' (Connection: school, SQL: select * from `payment_transactions` where `control_number` = 99613628650855 limit 1)  

@@ -23,7 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('class_id')->nullable()->after('school_id');
             $table->unsignedBigInteger('session_year_id')->nullable()->after('class_id');
         });
+
     }
+    
 
     /**
      * Reverse the migrations.
