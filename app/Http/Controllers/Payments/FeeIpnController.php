@@ -19,7 +19,6 @@ class FeeIpnController extends Controller
         Log::info('RECEIVED FEES IPN DATA:', ['all_data' => $request->all()]);
 
         if ($request->school_code) {
-            // Retrieve the school's database connection info
             $school = School::on('mysql')->where('code', $request->school_code)->where('installed', 1)->first();
 
             if (!$school) {
@@ -27,120 +26,89 @@ class FeeIpnController extends Controller
                 return response()->json(['error' => 'Invalid school identifier.'], 400);
             }
 
-            // Set the dynamic database connection
             Config::set('database.connections.school.database', $school->database_name);
             DB::purge('school');
             DB::connection('school')->reconnect();
             DB::setDefaultConnection('school');
-
-            Log::info('Processing IPN on school database: ' . DB::connection('school')->getDatabaseName());
         }
 
         DB::beginTransaction();
 
         try {
             $controlNumber = $request->control_number;
-            $amountPaid = $request->amount_paid ?? 0;
-            $status = $request->status ?? 'PENDING';
+            $amountPaidByGateway = $request->amount_paid ?? 0;
+            $externalTransactionId = $request->transaction_id ?? $request->payment_id;
+            $status = strtoupper($request->status ?? 'PENDING');
 
-            // Find the FeeControlNumber record
+            // 1. VERIFY CONTROL NUMBER
             $feeControlNumber = FeeControlNumber::where('control_number', $controlNumber)->first();
 
             if (!$feeControlNumber) {
-                Log::error('FeeControlNumber not found for control number: ' . $controlNumber);
+                Log::error('Control number not found: ' . $controlNumber);
                 DB::rollBack();
                 return response()->json(['error' => 'Control number not found.'], 404);
             }
 
-            // Update FeeControlNumber
-            $existingPayload = is_array($feeControlNumber->payload) ? $feeControlNumber->payload : (json_decode($feeControlNumber->payload ?? '[]', true) ?: []);
+            // 2. UPDATE FEE CONTROL NUMBER (Main Record)
+            $newTotalPaid = $feeControlNumber->amount_paid + $amountPaidByGateway;
+            $newBalance = $feeControlNumber->amount_required - $newTotalPaid;
+
             $feeControlNumber->update([
-                'amount_paid' => $amountPaid,
-                'balance' => $feeControlNumber->amount_required - $amountPaid,
-                'status' => $status,
-                'payload' => array_merge($existingPayload, ['ipn_data' => $request->all()])
+                'amount_paid' => $newTotalPaid,
+                'balance'     => $newBalance,
+                'status'      => $newBalance <= 0 ? 'PAID' : 'PARTIAL',
             ]);
 
-            // Find or create PaymentTransaction
-            $paymentTransaction = PaymentTransaction::where('control_number', $controlNumber)->first();
+            // 3. LOG TRANSACTION (Using ONLY your existing 13 columns)
+            
+            $paymentTransaction = PaymentTransaction::create([
+                'user_id'           => $feeControlNumber->student_id,
+                'amount'            => $amountPaidByGateway,
+                'payment_gateway'   => $request->payment_gateway ?? 'Gateway',
+                'order_id'          => 'ORD-' . time(),
+                'payment_id'        => $externalTransactionId,
+                'control_number'    => $controlNumber, // This exists in your DESC
+                'payment_status'    => ($status === 'PAID' || $status === 'SUCCESS') ? 'succeed' : 'pending',
+                'type'              => 'fees',
+                'school_id'         => $feeControlNumber->school_id,
+            ]);
 
-            if ($paymentTransaction) {
-                $paymentTransaction->update([
-                    'amount_paid' => $amountPaid,
-                    'balance' => $feeControlNumber->amount_required - $amountPaid,
-                    'ipn_status' => $status,
-                    'payment_status' => $status === 'PAID' ? 1 : 2, // 1 = success, 2 = pending
-                    'ipn_created_at' => now()
-                ]);
-            } else {
-                // Create new payment transaction if not exists
-                $paymentTransaction = PaymentTransaction::create([
-                    'user_id' => $feeControlNumber->student_id,
-                    'amount' => $feeControlNumber->amount_required,
-                    'payment_gateway' => 3, // Assuming 3 is for SM/other gateway
-                    'order_id' => 'IPN-' . time() . '-' . $feeControlNumber->student_id,
-                    'payment_status' => $status === 'PAID' ? 1 : 2,
-                    'school_id' => $feeControlNumber->school_id,
-                    'class_id' => $feeControlNumber->class_id,
-                    'session_year_id' => $feeControlNumber->session_year_id,
-                    'fee_type' => $feeControlNumber->fee_type,
-                    'fees_id' => $feeControlNumber->fees_id,
-                    'control_number' => $controlNumber,
-                    'student_name' => $request->student_name ?? $feeControlNumber->student->first_name . ' ' . $feeControlNumber->student->last_name,
-                    'amount_required' => $feeControlNumber->amount_required,
-                    'amount_paid' => $amountPaid,
-                    'balance' => $feeControlNumber->amount_required - $amountPaid,
-                    'ipn_status' => $status,
-                    'ipn_created_at' => now()
-                ]);
-            }
-
-            // Update or create FeesPaid record
-            $this->updateFeesPaid($feeControlNumber, $amountPaid, $status);
+            // 4. UPDATE SUMMARY TABLE
+            $this->updateFeesPaidSummary($feeControlNumber, $amountPaidByGateway);
 
             DB::commit();
-
-            Log::info('IPN processed successfully', [
-                'control_number' => $controlNumber,
-                'amount_paid' => $amountPaid,
-                'status' => $status
-            ]);
-
-            return response()->json(['success' => true, 'message' => 'IPN processed successfully']);
+            return response()->json(['success' => true, 'message' => 'Processed successfully']);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('IPN processing failed: ' . $e->getMessage());
-            return response()->json(['error' => 'IPN processing failed'], 500);
+            Log::error('IPN Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Processing failed'], 500);
         }
     }
 
-    private function updateFeesPaid(FeeControlNumber $feeControlNumber, $amountPaid, $status)
+    private function updateFeesPaidSummary($feeControlNumber, $incomingAmount)
     {
-        // Check if FeesPaid record exists for this fee and student
         $feesPaid = FeesPaid::where('fees_id', $feeControlNumber->fees_id)
             ->where('student_id', $feeControlNumber->student_id)
             ->first();
 
         if ($feesPaid) {
-            // Update existing record
-            $newAmount = $feesPaid->amount + $amountPaid;
+            $total = $feesPaid->amount + $incomingAmount;
             $feesPaid->update([
-                'amount' => $newAmount,
-                'is_fully_paid' => $newAmount >= $feeControlNumber->amount_required,
+                'amount' => $total,
+                'is_fully_paid' => $total >= $feeControlNumber->amount_required,
                 'date' => now()->toDateString()
             ]);
         } else {
-            // Create new FeesPaid record
             FeesPaid::create([
                 'fees_id' => $feeControlNumber->fees_id,
                 'student_id' => $feeControlNumber->student_id,
-                'amount' => $amountPaid,
-                'is_fully_paid' => $amountPaid >= $feeControlNumber->amount_required,
-                'is_used_installment' => false, // Assuming not using installments for now
+                'amount' => $incomingAmount,
+                'is_fully_paid' => $incomingAmount >= $feeControlNumber->amount_required,
                 'date' => now()->toDateString(),
                 'school_id' => $feeControlNumber->school_id
             ]);
         }
     }
 }
+
