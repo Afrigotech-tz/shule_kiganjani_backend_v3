@@ -53,11 +53,12 @@ class FeeIpnController extends Controller
             }
 
             // Update FeeControlNumber
+            $existingPayload = is_array($feeControlNumber->payload) ? $feeControlNumber->payload : (json_decode($feeControlNumber->payload ?? '[]', true) ?: []);
             $feeControlNumber->update([
                 'amount_paid' => $amountPaid,
                 'balance' => $feeControlNumber->amount_required - $amountPaid,
                 'status' => $status,
-                'payload' => array_merge($feeControlNumber->payload ?? [], ['ipn_data' => $request->all()])
+                'payload' => array_merge($existingPayload, ['ipn_data' => $request->all()])
             ]);
 
             // Find or create PaymentTransaction
