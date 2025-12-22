@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TimetableCollection;
 use App\Http\Resources\UserDataResource;
-use App\Models\FeeControlNumber;
 use App\Models\School;
 use App\Repositories\Announcement\AnnouncementInterface;
 use App\Repositories\Assignment\AssignmentInterface;
@@ -29,24 +28,26 @@ use App\Repositories\SystemSetting\SystemSettingInterface;
 use App\Repositories\Timetable\TimetableInterface;
 use App\Repositories\Topics\TopicsInterface;
 use App\Repositories\User\UserInterface;
-use App\Services\Payment\PaymentService;
 use App\Services\CachingService;
 use App\Services\FeaturesService;
 use App\Services\GeneralFunctionService;
+use App\Services\Payment\PaymentService;
 use App\Services\ResponseService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use App\Models\FeeControlNumber;
 use JetBrains\PhpStorm\NoReturn;
-use DateTime;
 use Throwable;
 
 class ParentApiController extends Controller
 {
+
     private StudentInterface $student;
     private UserInterface $user;
     private AssignmentInterface $assignment;
@@ -72,6 +73,7 @@ class ParentApiController extends Controller
     private SchoolSettingInterface $schoolSetting;
     private GeneralFunctionService $generalFunction;
     private DiaryStudentInterface $diaryStudent;
+
 
     public function __construct(StudentInterface $student, UserInterface $user, AssignmentInterface $assignment, AssignmentSubmissionInterface $assignmentSubmission, CachingService $cache, TimetableInterface $timetable, ExamInterface $exam, ExamResultInterface $examResult, LessonsInterface $lesson, TopicsInterface $lessonTopic, AttendanceInterface $attendance, HolidayInterface $holiday, SubjectTeacherInterface $subjectTeacher, AnnouncementInterface $announcement, OnlineExamInterface $onlineExam, FeesInterface $fees, PaymentTransactionInterface $paymentTransaction, SlidersInterface $sliders, PaymentConfigurationInterface $paymentConfigurations, FeesPaidInterface $feesPaid, SubjectTeacherInterface $subjectTeachers, SystemSettingInterface $systemSetting, SchoolSettingInterface $schoolSetting, GeneralFunctionService $generalFunction, DiaryStudentInterface $diaryStudent)
     {
@@ -102,9 +104,10 @@ class ParentApiController extends Controller
         $this->diaryStudent = $diaryStudent;
     }
 
-    #[NoReturn]
-    public function login(Request $request)
+
+    #[NoReturn] public function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -171,9 +174,7 @@ class ParentApiController extends Controller
 
     public function subjects(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'child_id' => 'required|numeric',
-        ]);
+        $validator = Validator::make($request->all(), ['child_id' => 'required|numeric',]);
 
         if ($validator->fails()) {
             ResponseService::validationError($validator->errors()->first());
@@ -197,9 +198,7 @@ class ParentApiController extends Controller
 
     public function classSubjects(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'child_id' => 'required|numeric',
-        ]);
+        $validator = Validator::make($request->all(), ['child_id' => 'required|numeric',]);
 
         if ($validator->fails()) {
             ResponseService::validationError($validator->errors()->first());
@@ -223,9 +222,7 @@ class ParentApiController extends Controller
 
     public function getTimetable(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'child_id' => 'required|numeric',
-        ]);
+        $validator = Validator::make($request->all(), ['child_id' => 'required|numeric',]);
 
         if ($validator->fails()) {
             ResponseService::validationError($validator->errors()->first());
@@ -242,9 +239,9 @@ class ParentApiController extends Controller
             // Get student's subjects
             $studentSubjects = $children->currentSemesterSubjects();
 
-            $core_subjects = $studentSubjects['core_subject']->pluck('id')->toArray();
+            $core_subjects = $studentSubjects["core_subject"]->pluck('id')->toArray();
 
-            $elective_subjects = $studentSubjects['elective_subject'] ?? [];
+            $elective_subjects = $studentSubjects["elective_subject"] ?? [];
 
             if ($elective_subjects) {
                 $elective_subjects = $elective_subjects->pluck('class_subject.subject.id')->toArray();
@@ -253,20 +250,16 @@ class ParentApiController extends Controller
             $subjectIds = array_merge($core_subjects, $elective_subjects);
 
             // Get timetable with filtered subjects
-            $timetable = $this
-                ->timetable
-                ->builder()
+            $timetable = $this->timetable->builder()
                 ->where('class_section_id', $children->class_section_id)
                 ->where(function ($query) use ($subjectIds) {
-                    $query
-                        ->whereIn('subject_id', $subjectIds)
+                    $query->whereIn('subject_id', $subjectIds)
                         ->orWhereNull('subject_id');
                 })
                 ->where(function ($query) use ($subjectIds) {
-                    $query
-                        ->whereHas('subject_teacher', function ($q) use ($subjectIds) {
-                            $q->whereIn('subject_id', $subjectIds);
-                        })
+                    $query->whereHas('subject_teacher', function ($q) use ($subjectIds) {
+                        $q->whereIn('subject_id', $subjectIds);
+                    })
                         ->orWhereDoesntHave('subject_teacher');
                 })
                 ->with([
@@ -277,12 +270,13 @@ class ParentApiController extends Controller
                 ->orderBy('start_time')
                 ->get();
 
-            ResponseService::successResponse('Timetable Fetched Successfully', new TimetableCollection($timetable));
+            ResponseService::successResponse("Timetable Fetched Successfully", new TimetableCollection($timetable));
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
         }
     }
+
 
     public function getLessons(Request $request)
     {
@@ -321,12 +315,14 @@ class ParentApiController extends Controller
 
             $lessonData = $lessonQuery->get();
 
-            ResponseService::successResponse('Lessons Fetched Successfully', $lessonData);
+            ResponseService::successResponse("Lessons Fetched Successfully", $lessonData);
+
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
         }
     }
+
 
     public function getLessonTopics(Request $request)
     {
@@ -353,7 +349,7 @@ class ParentApiController extends Controller
                 $data->where('id', $request->topic_id);
             }
             $data = $data->get();
-            ResponseService::successResponse('Topics Fetched Successfully', $data);
+            ResponseService::successResponse("Topics Fetched Successfully", $data);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -381,16 +377,13 @@ class ParentApiController extends Controller
             if (empty($children)) {
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
-            $data = $this
-                ->assignment
-                ->builder()
-                ->with([
-                    'file',
-                    'class_subject.subject',
-                    'submission' => function ($query) use ($children) {
-                        $query->where('student_id', $children->user_id)->with('file');
-                    }
-                ])
+            $data = $this->assignment->builder()->with([
+                'file',
+                'class_subject.subject',
+                'submission' => function ($query) use ($children) {
+                    $query->where('student_id', $children->user_id)->with('file');
+                }
+            ])
                 ->whereHas('assignment_commons', function ($query) use ($children) {
                     $query->where('class_section_id', $children->class_section_id);
                 });
@@ -414,7 +407,7 @@ class ParentApiController extends Controller
                 }
             }
             $data = $data->orderBy('id', 'desc')->paginate(15);
-            ResponseService::successResponse('Assignments Fetched Successfully', $data);
+            ResponseService::successResponse("Assignments Fetched Successfully", $data);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -459,7 +452,7 @@ class ParentApiController extends Controller
 
             $data = ['attendance' => $attendance, 'holidays' => $holidays, 'session_year' => $sessionYear];
 
-            ResponseService::successResponse('Attendance Details Fetched Successfully', $data);
+            ResponseService::successResponse("Attendance Details Fetched Successfully", $data);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -489,33 +482,35 @@ class ParentApiController extends Controller
             $classSectionId = $children->class_section_id;
 
             $sessionYear = $this->cache->getDefaultSessionYear($children->school_id);
-            if (isset($request->type) && $request->type == 'subject') {
+            if (isset($request->type) && $request->type == "subject") {
                 $table = $this->subjectTeacher->builder()->where(['class_section_id' => $children->class_section_id, 'class_subject_id' => $request->class_subject_id])->get()->pluck('id');
                 if ($table === null) {
-                    ResponseService::errorResponse('Invalid Subject ID', null, config('constants.RESPONSE_CODE.INVALID_SUBJECT_ID'));
+                    ResponseService::errorResponse("Invalid Subject ID", null, config('constants.RESPONSE_CODE.INVALID_SUBJECT_ID'));
                 }
             }
             $data = $this->announcement->builder()->with('file')->where('session_year_id', $sessionYear->id);
 
-            if (isset($request->type) && $request->type == 'class') {
+            if (isset($request->type) && $request->type == "class") {
                 $data = $data->whereHas('announcement_class', function ($query) use ($classSectionId) {
                     $query->where(['class_section_id' => $classSectionId, 'class_subject_id' => null]);
                 });
             }
 
-            if (isset($request->type) && $request->type == 'subject') {
+
+            if (isset($request->type) && $request->type == "subject") {
                 $data = $data->whereHas('announcement_class', function ($query) use ($classSectionId, $request) {
                     $query->where(['class_section_id' => $classSectionId, 'class_subject_id' => $request->class_subject_id]);
                 });
             }
 
             $data = $data->orderBy('id', 'desc')->paginate(15);
-            ResponseService::successResponse('Announcement Details Fetched Successfully', $data);
+            ResponseService::successResponse("Announcement Details Fetched Successfully", $data);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
         }
     }
+
 
     public function getTeachers(Request $request)
     {
@@ -536,9 +531,7 @@ class ParentApiController extends Controller
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
             $class_subject_id = $children->selectedStudentSubjects()->pluck('class_subject_id');
-            $subjectTeachers = $this
-                ->subjectTeachers
-                ->builder()
+            $subjectTeachers = $this->subjectTeachers->builder()
                 ->select('id', 'subject_id', 'teacher_id', 'school_id')
                 ->whereIn('class_subject_id', $class_subject_id)
                 ->where('class_section_id', $children->class_section_id)
@@ -548,7 +541,7 @@ class ParentApiController extends Controller
                     'teacher:id,first_name,last_name,image,mobile'
                 ])
                 ->get();
-            ResponseService::successResponse('Teacher Details Fetched Successfully', $subjectTeachers);
+            ResponseService::successResponse("Teacher Details Fetched Successfully", $subjectTeachers);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -574,7 +567,7 @@ class ParentApiController extends Controller
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
             $sessionYear = $this->cache->getDefaultSessionYear($children->school_id);
-            ResponseService::successResponse('Session Year Fetched Successfully', $sessionYear ?? []);
+            ResponseService::successResponse("Session Year Fetched Successfully", $sessionYear ?? []);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -592,10 +585,10 @@ class ParentApiController extends Controller
         }
         try {
             //            $childData = Auth::user()->guardianRelationChild()->where('id', $request->child_id)->with(['class_section' => function ($query) {
-            //                $query->with('section', 'class', 'medium', 'class.shift', 'class.stream');
-            //            }, 'guardian', 'user'                                                                                      => function ($q) {
-            //                $q->with('extra_student_details.form_field', 'school');
-            //            }])->first();
+//                $query->with('section', 'class', 'medium', 'class.shift', 'class.stream');
+//            }, 'guardian', 'user'                                                                                      => function ($q) {
+//                $q->with('extra_student_details.form_field', 'school');
+//            }])->first();
 
             $childData = Auth::user()->guardianRelationChild()->with([
                 'class_section' => function ($query) {
@@ -666,19 +659,14 @@ class ParentApiController extends Controller
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
             $classId = $student->class_section->class_id;
-            $exam = $this
-                ->exam
-                ->builder()
+            $exam = $this->exam->builder()
                 ->where('class_id', $classId)
                 ->with([
                     'timetable' => function ($query) {
-                        $query
-                            ->selectRaw('* , SUM(total_marks) as total_marks')
+                        $query->selectRaw('* , SUM(total_marks) as total_marks')
                             ->groupBy('exam_id');
                     }
-                ])
-                ->has('timetable')
-                ->get();
+                ])->has('timetable')->get();
 
             $exam_data = array();
             // 3 => All Details, 0 => Upcoming, 1 => On Going, 2 => Completed
@@ -699,7 +687,7 @@ class ParentApiController extends Controller
                 ];
             }
 
-            ResponseService::successResponse('Exam List fetched Successfully', $exam_data ?? []);
+            ResponseService::successResponse("Exam List fetched Successfully", $exam_data ?? []);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e, 'parentApiController :- getExamList Method');
             ResponseService::errorResponse();
@@ -733,29 +721,28 @@ class ParentApiController extends Controller
                 $electiveSubjects = $electiveSubjects->pluck('class_subject.subject.id')->toArray();
             }
             $subjectIds = array_merge($coreSubjects, $electiveSubjects);
-            $examData = $this
-                ->exam
-                ->builder()
+            $examData = $this->exam->builder()
                 ->where([
                     'id' => $request->exam_id,
                     'class_id' => $classId
                 ])
                 ->with([
                     'timetable' => function ($query) use ($subjectIds) {
-                        $query
-                            ->owner()
+                        $query->owner()
                             ->with(['class_subject.subject'])
                             ->whereHas('class_subject', function ($q) use ($subjectIds) {
-                                $q->whereIn('subject_id', $subjectIds);  // filter by actual subject
+                                $q->whereIn('subject_id', $subjectIds); // filter by actual subject
                             })
                             ->orderBy('date');
                     }
                 ])
                 ->first();
 
+
             if (!$examData) {
-                ResponseService::successResponse('', []);
+                ResponseService::successResponse("", []);
             }
+
 
             foreach ($examData->timetable as $data) {
                 $exam_data[] = array(
@@ -775,7 +762,7 @@ class ParentApiController extends Controller
                     )
                 );
             }
-            ResponseService::successResponse('', $exam_data ?? []);
+            ResponseService::successResponse("", $exam_data ?? []);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e, 'parentApiController :- getExamDetails Method');
             ResponseService::errorResponse();
@@ -793,7 +780,7 @@ class ParentApiController extends Controller
         }
         try {
             // Student Data
-            //            $studentData = $this->student->findById($request->child_id, ['id', 'user_id', 'class_section_id'], ['class_section']);
+//            $studentData = $this->student->findById($request->child_id, ['id', 'user_id', 'class_section_id'], ['class_section']);
             $studentData = Auth::user()->guardianRelationChild()->where('id', $request->child_id)->whereHas('user', function ($q) {
                 $q->whereNull('deleted_at');
             })->first();
@@ -809,8 +796,7 @@ class ParentApiController extends Controller
                 'exam.timetable:id,exam_id,start_time,end_time',
                 'session_year',
                 'exam.marks' => function ($q) use ($studentData) {
-                    $q
-                        ->where('student_id', $studentData->user_id)
+                    $q->where('student_id', $studentData->user_id)
                         ->with([
                             'class_subject' => function ($q) {
                                 $q->withTrashed()->with([
@@ -819,9 +805,11 @@ class ParentApiController extends Controller
                                     }
                                 ]);
                             }
-                        ]);;
+                        ]);
+                    ;
                 }
             ])->where('student_id', $studentData->user_id)->get();
+
 
             // Check that Exam Result DB is not empty
             if (count($examResultDB)) {
@@ -856,9 +844,9 @@ class ParentApiController extends Controller
                         'exam_marks' => $exam_marks,
                     );
                 }
-                ResponseService::successResponse('Exam Result Fetched Successfully', $data ?? null);
+                ResponseService::successResponse("Exam Result Fetched Successfully", $data ?? null);
             } else {
-                ResponseService::successResponse('Exam Result Fetched Successfully', []);
+                ResponseService::successResponse("Exam Result Fetched Successfully", []);
             }
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
@@ -888,9 +876,7 @@ class ParentApiController extends Controller
             $classSectionId = $student->class_section->id;
             $sessionYear = $this->cache->getDefaultSessionYear($student->school_id);
 
-            $onlineExamData = $this
-                ->onlineExam
-                ->builder()
+            $onlineExamData = $this->onlineExam->builder()
                 ->whereHas('online_exam_commons', function ($query) use ($student) {
                     $query->where('class_section_id', $student->class_section_id);
                 })
@@ -911,7 +897,7 @@ class ParentApiController extends Controller
 
             ResponseService::successResponse('Data Fetched Successfully', $onlineExamData);
         } catch (Throwable $e) {
-            ResponseService::logErrorResponse($e, 'Parent API ');
+            ResponseService::logErrorResponse($e, "Parent API ");
             ResponseService::errorResponse();
         }
     }
@@ -940,13 +926,10 @@ class ParentApiController extends Controller
 
             $studentSubjects = $student->selectedStudentSubjects()->pluck('class_subject_id');
             // Get Online Exam Data Where Logged in Student have attempted data and Relation Data with Question Choice , Student's answer with user submitted question with question and its option
-            $onlineExamData = $this
-                ->onlineExam
-                ->builder()
+            $onlineExamData = $this->onlineExam->builder()
                 ->when($request->class_subject_id, function ($query) use ($request, $classSectionId) {
                     $query->whereHas('online_exam_commons', function ($q) use ($request, $classSectionId) {
-                        $q
-                            ->where('class_subject_id', $request->class_subject_id)
+                        $q->where('class_subject_id', $request->class_subject_id)
                             ->where('class_section_id', $classSectionId);
                     });
                 })
@@ -957,20 +940,18 @@ class ParentApiController extends Controller
                 ->whereIn('class_subject_id', $studentSubjects)
                 ->with([
                     'student_answers' => function ($q) use ($student) {
-                        $q
-                            ->where('student_id', $student->user_id)
+                        $q->where('student_id', $student->user_id)
                             ->with('user_submitted_questions.questions:id', 'user_submitted_questions.questions.options:id,question_id,is_answer');
                     }
-                ])
-                ->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
+                ])->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
                 // ->with('question_choice:id,online_exam_id,marks', 'student_answers.user_submitted_questions.questions:id', 'student_answers.user_submitted_questions.questions.options:id,question_id,is_answer', 'class_subject.subject:id,name,type,code,bg_color,image')
-                ->paginate(15)
-                ->toArray();
+                ->paginate(15)->toArray();
 
-            $examListData = array();  // Initialized Empty examListData Array
+            $examListData = array(); // Initialized Empty examListData Array
 
             // Loop through Exam data
             foreach ($onlineExamData['data'] as $data) {
+
                 // Get Total Marks of Particular Exam
                 $totalMarks = collect($data['question_choice'])->sum('marks');
 
@@ -985,6 +966,7 @@ class ParentApiController extends Controller
 
                 // Loop through Student's Grouped answers
                 foreach ($grouped_answers as $student_answers) {
+
                     // Filter the options whose is_answer values is 1
                     $correct_option_ids = array_filter($student_answers[0]['user_submitted_questions']['questions']['options'], static function ($option) {
                         return $option['is_answer'] == 1;
@@ -1010,8 +992,8 @@ class ParentApiController extends Controller
                         'name' => $data['class_subject']['subject']['name'] . ' - ' . $data['class_subject']['subject']['type'],
                     ),
                     'title' => $data['title'],
-                    'obtained_marks' => $totalObtainedMarks ?? '0',
-                    'total_marks' => $totalMarks ?? '0',
+                    'obtained_marks' => $totalObtainedMarks ?? "0",
+                    'total_marks' => $totalMarks ?? "0",
                     'exam_submitted_date' => date('Y-m-d', strtotime($data['end_date']))
                 );
             }
@@ -1026,7 +1008,7 @@ class ParentApiController extends Controller
                 'total' => $onlineExamData['total'],
             );
 
-            ResponseService::successResponse('', $examList);
+            ResponseService::successResponse("", $examList);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -1053,9 +1035,7 @@ class ParentApiController extends Controller
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
             // Online Exam Data
-            $onlineExam = $this
-                ->onlineExam
-                ->builder()
+            $onlineExam = $this->onlineExam->builder()
                 ->where('id', $request->online_exam_id)
                 ->whereHas('student_attempt', function ($q) use ($student) {
                     $q->where('student_id', $student->user_id);
@@ -1067,16 +1047,15 @@ class ParentApiController extends Controller
                 // ])
                 ->with([
                     'student_answers' => function ($q) use ($student) {
-                        $q
-                            ->where('student_id', $student->user_id)
+                        $q->where('student_id', $student->user_id)
                             ->with('user_submitted_questions.questions:id', 'user_submitted_questions.questions.options:id,question_id,is_answer');
                     }
-                ])
-                ->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
+                ])->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
                 ->first();
 
             if (isset($onlineExam) && $onlineExam != null) {
-                // Get Total Question Count and Total Marks
+
+                //Get Total Question Count and Total Marks
                 $totalQuestions = $onlineExam->question_choice->count();
                 $totalMarks = $onlineExam->question_choice->sum('marks');
 
@@ -1089,10 +1068,11 @@ class ParentApiController extends Controller
                 // Initialized the variables
                 $correctQuestionData = array();
                 $correctQuestions = 0;
-                $totalObtainedMarks = '0';
+                $totalObtainedMarks = "0";
 
                 // Loop through Student's Grouped answers
                 foreach ($grouped_answers as $student_answers) {
+
                     // Filter the options whose is_answer values is 1
                     $correct_option_ids = array_filter($student_answers[0]['user_submitted_questions']['questions']['options'], static function ($option) {
                         return $option['is_answer'] == 1;
@@ -1106,6 +1086,7 @@ class ParentApiController extends Controller
 
                     // Check if the student's answers exactly match the correct answers then add marks with totalObtainedMarks
                     if (!array_diff($correct_option_ids, $student_option_ids) && !array_diff($student_option_ids, $correct_option_ids)) {
+
                         // Sum Question marks with ObtainedMarks
                         $totalObtainedMarks += $student_answers[0]['user_submitted_questions']['marks'];
 
@@ -1122,6 +1103,7 @@ class ParentApiController extends Controller
                         );
                     }
                 }
+
 
                 // Check correctQuestionIds exists and not empty
                 if (!empty($correctQuestionIds)) {
@@ -1158,9 +1140,9 @@ class ParentApiController extends Controller
                     'total_obtained_marks' => $totalObtainedMarks,
                     'total_marks' => $totalMarks ?? '0'
                 );
-                ResponseService::successResponse('', $onlineExamResult);
+                ResponseService::successResponse("", $onlineExamResult);
             } else {
-                ResponseService::successResponse('', []);
+                ResponseService::successResponse("", []);
             }
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
@@ -1189,14 +1171,11 @@ class ParentApiController extends Controller
             }
             $sessionYear = $this->cache->getDefaultSessionYear($student->school_id);
 
-            $onlineExams = $this
-                ->onlineExam
-                ->builder()
+            $onlineExams = $this->onlineExam->builder()
                 ->has('question_choice')
                 ->when($request->class_subject_id, function ($query) use ($request, $student) {
                     $query->whereHas('online_exam_commons', function ($q) use ($request, $student) {
-                        $q
-                            ->where('class_subject_id', $request->class_subject_id)
+                        $q->where('class_subject_id', $request->class_subject_id)
                             ->where('class_section_id', $student->class_section_id);
                     });
                 })
@@ -1212,12 +1191,10 @@ class ParentApiController extends Controller
                 // ])
                 ->with([
                     'student_answers' => function ($q) use ($student) {
-                        $q
-                            ->where('student_id', $student->user_id)
+                        $q->where('student_id', $student->user_id)
                             ->with('user_submitted_questions.questions:id', 'user_submitted_questions.questions.options:id,question_id,is_answer');
                     }
-                ])
-                ->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
+                ])->with('question_choice:id,online_exam_id,marks', 'class_subject.subject:id,name,type,code,bg_color,image')
                 ->paginate(10);
             $totalMarks = 0;
             $totalObtainedMarks = 0;
@@ -1230,7 +1207,7 @@ class ParentApiController extends Controller
                     $totalMarks = collect($onlineExam['question_choice'])->sum('marks');
 
                     // Initialized totalObtainedMarks with 0
-                    $totalObtainedMarks = '0';
+                    $totalObtainedMarks = "0";
 
                     // Group Student's Answers by question_id
                     $grouped_answers = [];
@@ -1240,6 +1217,7 @@ class ParentApiController extends Controller
 
                     // Loop through Student's Grouped answers
                     foreach ($grouped_answers as $student_answers) {
+
                         // Filter the options whose is_answer values is 1
                         $correct_option_ids = array_filter($student_answers[0]['user_submitted_questions']['questions']['options'], static function ($option) {
                             return $option['is_answer'] == 1;
@@ -1265,6 +1243,7 @@ class ParentApiController extends Controller
                         'total_marks' => (string) $totalMarks,
                     ];
                 }
+
 
                 // Calculate Percentage
                 if ($totalMarks > 0) {
@@ -1297,8 +1276,9 @@ class ParentApiController extends Controller
                 $onlineExamReportData = [];
             }
 
+
             // Return the response
-            ResponseService::successResponse('', $onlineExamReportData);
+            ResponseService::successResponse("", $onlineExamReportData);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -1327,11 +1307,8 @@ class ParentApiController extends Controller
             $sessionYear = $this->cache->getDefaultSessionYear($student->school_id);
 
             // Assignment Data
-            $assignments = $this
-                ->assignment
-                ->builder()
-                ->where(['class_section_id' => $student->class_section_id, 'session_year_id' => $sessionYear->id, 'class_subject_id' => $request->class_subject_id])
-                ->whereNotNull('points')
+            $assignments = $this->assignment->builder()
+                ->where(['class_section_id' => $student->class_section_id, 'session_year_id' => $sessionYear->id, 'class_subject_id' => $request->class_subject_id])->whereNotNull('points')
                 ->get();
 
             // Get the assignment submissions
@@ -1379,174 +1356,15 @@ class ParentApiController extends Controller
                 ],
             ];
 
-            ResponseService::successResponse('Data Fetched Successfully', $assignment_report);
+
+            ResponseService::successResponse("Data Fetched Successfully", $assignment_report);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
         }
     }
 
-    // Get Fees Details
-    // public function getFees(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'child_id' => 'required',
-    //         'session_year_id' => 'nullable|numeric'
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         ResponseService::validationError($validator->errors()->first());
-    //     }
-    //     try {
-    //         $student = Auth::user()->guardianRelationChild()->where('id', $request->child_id)->whereHas('user', function ($q) {
-    //             $q->whereNull('deleted_at');
-    //         })->first();
-
-    //         if (empty($student)) {
-    //             ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
-    //         }
-
-    //         $classId = $student->class_section->class_id;
-    //         $schoolId = $student->user->school_id;
-
-    //         $currentSessionYear = $this->cache->getDefaultSessionYear($schoolId);
-    //         $sessionYearId = $request->session_year_id ?? $currentSessionYear->id;
-
-    //         $fees = $this->fees->builder()->where('class_id', $classId)
-    //             ->with([
-    //                 'fees_class_type.fees_type',
-    //                 'fees_paid' => function ($query) use ($student) {
-    //                     $query->where(['student_id' => $student->user_id])->with('compulsory_fee.advance_fees', 'optional_fee');
-    //                 },
-    //                 'session_year',
-    //                 'class.medium',
-    //                 'class.stream'
-    //             ])->where(['session_year_id' => $sessionYearId])->orderBy('id', 'desc')->get();
-
-    //         $currentDateTimestamp = new DateTime(date('Y-m-d'));
-
-    //         foreach ($fees as $fee) {
-    //             $feesDateTimestamp = new DateTime($fee->due_date);
-
-    //             // Set Optional Fees Data in response
-    //             if (count($fee->optional_fees) > 0) {
-    //                 collect($fee->optional_fees)->map(function ($optionalFees) use ($student) {
-    //                     $isOptionalFeesPaid = $student->user->optional_fees->first(function ($optionalFeesPaid) use ($optionalFees, $student) {
-    //                         return $optionalFeesPaid->fees_class_id == $optionalFees->id && $optionalFeesPaid->student_id == $student->user->id;
-    //                     });
-    //                     $optionalFees['is_paid'] = $isOptionalFeesPaid ? true : false;
-    //                     return $optionalFees;
-    //                 });
-    //             }
-
-    //             // Set Compulsory Fees Data in response
-    //             if (count($fee->compulsory_fees) > 0) {
-    //                 $fee->is_overdue = $currentDateTimestamp > $feesDateTimestamp; // true/false
-    //                 collect($fee->compulsory_fees)->map(function ($compulsoryFees) use ($student) {
-    //                     $isCompulsoryFeesPaid = $student->user->compulsory_fees->first(function ($compulsoryFeesPaid) use ($student) {
-    //                         return $compulsoryFeesPaid->type == 'Full Payment' && $compulsoryFeesPaid->student_id == $student->user->id;
-    //                     });
-    //                     $compulsoryFees['is_paid'] = $isCompulsoryFeesPaid ? true : false;
-    //                     return $compulsoryFees;
-    //                 });
-    //             }
-
-    //             // Set Installment Data in Response
-    //             if (count($fee->installments) > 0) {
-    //                 $totalFeesAmount = $fee->total_compulsory_fees;
-    //                 $totalInstallments = count($fee->installments);
-    //                 $paidInstallments = 0;
-    //                 $totalPaidAmount = 0;
-
-    //                 // First pass - identify paid installments
-    //                 foreach ($fee->installments as $installment) {
-    //                     $installmentPaid = $student->user->compulsory_fees->first(function ($compulsoryFeesPaid) use ($installment, $student) {
-    //                         return $compulsoryFeesPaid->type == "Installment Payment" && $compulsoryFeesPaid->installment_id == $installment->id && $compulsoryFeesPaid->student_id == $student->user->id;
-    //                     });
-
-    //                     if (!empty($installmentPaid)) {
-    //                         $paidInstallments++;
-    //                         $totalPaidAmount += $installmentPaid->amount;
-    //                         $installment['is_paid'] = true;
-    //                         $installment['minimum_amount'] = $installmentPaid->amount;
-    //                         $installment['maximum_amount'] = $installmentPaid->amount;
-    //                         $installment['due_charges_amount'] = $installmentPaid->due_charges;
-    //                     } else {
-    //                         $installment['is_paid'] = false;
-    //                     }
-    //                 }
-
-    //                 // Calculate remaining amount and installments
-    //                 $remainingAmount = $totalFeesAmount - $totalPaidAmount;
-    //                 $remainingInstallments = $totalInstallments - $paidInstallments;
-
-    //                 // Second pass - handle unpaid installments
-    //                 if ($remainingInstallments > 0) {
-    //                     // Equal amount for first (n-1) unpaid installments
-    //                     $equalInstallmentAmount = 0;
-    //                     if ($remainingInstallments > 1) {
-    //                         $equalInstallmentAmount = $installment->installment_amount;
-    //                     }
-
-    //                     $unpaidInstallmentsProcessed = 0;
-    //                     $amountDistributed = 0;
-
-    //                     foreach ($fee->installments as $index => $installment) {
-    //                         if ($installment['is_paid']) {
-    //                             continue; // Skip paid installments
-    //                         }
-
-    //                         $unpaidInstallmentsProcessed++;
-    //                         $installmentDueDateTimestamp = new DateTime($installment['due_date']);
-
-    //                         // For last unpaid installment, use remaining balance
-    //                         $installment['minimum_amount'] = $installment->installment_amount;
-
-    //                         if ($unpaidInstallmentsProcessed == $remainingInstallments) {
-    //                             $installment['maximum_amount'] = $remainingAmount;
-    //                         } else {
-    //                             $installment['maximum_amount'] = $remainingAmount - $amountDistributed;
-    //                             $amountDistributed += $installment->installment_amount;
-    //                         }
-
-    //                         // Calculate due charges if applicable
-    //                         if ($currentDateTimestamp > $installmentDueDateTimestamp) {
-    //                             if ($installment->due_charges_type == "percentage") {
-    //                                 $installment['due_charges_amount'] = ($installment['minimum_amount'] * $installment['due_charges']) / 100;
-    //                             } else if ($installment->due_charges_type == "fixed") {
-    //                                 $installment['due_charges_amount'] = $installment->due_charges;
-    //                             }
-    //                         } else {
-    //                             $installment['due_charges_amount'] = 0;
-    //                         }
-    //                     }
-    //                 }
-
-    //                 $previousInstallmentDate = new DateTime('now -1 day');
-    //                 // Third pass - identify current installment
-    //                 foreach ($fee->installments as $installment) {
-    //                     $installmentDueDateTimestamp = new DateTime($installment['due_date']);
-
-    //                     /* Current date should be less then the due date && greater than the due date of previous installments */
-    //                     /* In case of first installment, previous installment date will be current date - 1 */
-    //                     if ($currentDateTimestamp <= $installmentDueDateTimestamp && $currentDateTimestamp > $previousInstallmentDate) {
-    //                         $installment['is_current'] = true;
-    //                     } else {
-    //                         $installment['is_current'] = false;
-    //                     }
-    //                     $previousInstallmentDate = new DateTime($installment['due_date']);
-    //                 }
-    //             }
-    //         }
-
-    //         ResponseService::successResponse("Fees Fetched Successfully", $fees);
-    //     } catch (Throwable $e) {
-    //         ResponseService::logErrorResponse($e);
-    //         ResponseService::errorResponse();
-    //     }
-
-    // }
-
+    //Get Fees Details
     public function getFees(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -1557,148 +1375,149 @@ class ParentApiController extends Controller
         if ($validator->fails()) {
             ResponseService::validationError($validator->errors()->first());
         }
-
         try {
-            /** ---------------- STUDENT VALIDATION ---------------- */
-            $student = Auth::user()
-                ->guardianRelationChild()
-                ->where('id', $request->child_id)
-                ->whereHas('user', function ($q) {
-                    $q->whereNull('deleted_at');
-                })
-                ->first();
+            $student = Auth::user()->guardianRelationChild()->where('id', $request->child_id)->whereHas('user', function ($q) {
+                $q->whereNull('deleted_at');
+            })->first();
 
-            if (!$student) {
-                ResponseService::errorResponse(
-                    "Child's Account is not Active. Contact School Support",
-                    null,
-                    config('constants.RESPONSE_CODE.INACTIVE_CHILD')
-                );
+            if (empty($student)) {
+                ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
-
-            $schoolId = $student->user->school_id;
             $classId = $student->class_section->class_id;
+            $schoolId = $student->user->school_id;
 
             $currentSessionYear = $this->cache->getDefaultSessionYear($schoolId);
             $sessionYearId = $request->session_year_id ?? $currentSessionYear->id;
 
-            /** ---------------- FETCH FEES + PAYMENTS + CONTROL NUMBERS ---------------- */
-            $fees = $this
-                ->fees
-                ->builder()
-                ->where('class_id', $classId)
-                ->where('session_year_id', $sessionYearId)
+            $fees = $this->fees->builder()->where('class_id', $classId)
                 ->with([
                     'fees_class_type.fees_type',
-                    'installments',
+                    'fees_paid' => function ($query) use ($student) {
+                        $query->where(['student_id' => $student->user_id])->with('compulsory_fee.advance_fees', 'optional_fee');
+                    },
                     'session_year',
                     'class.medium',
-                    'class.stream',
-                    // Payments
-                    'fees_paid' => function ($q) use ($student) {
-                        $q
-                            ->where('student_id', $student->user_id)
-                            ->with('compulsory_fee.advance_fees', 'optional_fee');
-                    },
-                    // Control Numbers
-                    'fee_control_numbers' => function ($q) use ($student, $sessionYearId) {
-                        $q
-                            ->where('student_id', $student->user_id)
-                            ->where('session_year_id', $sessionYearId)
-                            ->where('fee_type', 'compulsory');
-                    }
-                ])
-                ->orderBy('id', 'desc')
-                ->get();
+                    'class.stream'
+                ])->where(['session_year_id' => $sessionYearId])->orderBy('id', 'desc')->get();
 
-            $currentDate = new DateTime(date('Y-m-d'));
+            $currentDateTimestamp = new DateTime(date('Y-m-d'));
 
-            /** ---------------- PROCESS EACH FEE ---------------- */
             foreach ($fees as $fee) {
-                /** ---------- CONTROL NUMBER DETAILS ---------- */
-                $control = $fee
-                    ->fee_control_numbers
-                    ->where('fees_id', $fee->id)
-                    ->first();
+                $feesDateTimestamp = new DateTime($fee->due_date);
 
-                $fee->control_number_details = $control ? [
-                    'control_number' => $control->control_number,
-                    'amount_required' => $control->amount_required,
-                    'amount_paid' => $control->amount_paid,
-                    'balance' => $control->balance,
-                    'status' => $control->status,
-                    'generated_at' => $control->created_at
-                ] : null;
-
-                /** ---------- OVERDUE STATUS ---------- */
-                $fee->is_overdue = $currentDate > new DateTime($fee->due_date);
-
-                /** ---------- OPTIONAL FEES ---------- */
-                if ($fee->optional_fees->count()) {
-                    $fee->optional_fees->map(function ($optional) use ($student) {
-                        $optional['is_paid'] = $student
-                            ->user
-                            ->optional_fees
-                            ->where('fees_class_id', $optional->id)
-                            ->where('student_id', $student->user->id)
-                            ->isNotEmpty();
-                        return $optional;
+                // Set Optional Fees Data in response
+                if (count($fee->optional_fees) > 0) {
+                    collect($fee->optional_fees)->map(function ($optionalFees) use ($student) {
+                        $isOptionalFeesPaid = $student->user->optional_fees->first(function ($optionalFeesPaid) use ($optionalFees, $student) {
+                            return $optionalFeesPaid->fees_class_id == $optionalFees->id && $optionalFeesPaid->student_id == $student->user->id;
+                        });
+                        $optionalFees['is_paid'] = $isOptionalFeesPaid ? true : false;
+                        return $optionalFees;
                     });
                 }
 
-                /** ---------- COMPULSORY FEES ---------- */
-                if ($fee->compulsory_fees->count()) {
-                    $fee->compulsory_fees->map(function ($compulsory) use ($student) {
-                        $compulsory['is_paid'] = $student
-                            ->user
-                            ->compulsory_fees
-                            ->where('student_id', $student->user->id)
-                            ->where('type', 'Full Payment')
-                            ->isNotEmpty();
-                        return $compulsory;
+
+                // Set Compulsory Fees Data in response
+                if (count($fee->compulsory_fees) > 0) {
+                    $fee->is_overdue = $currentDateTimestamp > $feesDateTimestamp; // true/false
+                    collect($fee->compulsory_fees)->map(function ($compulsoryFees) use ($student) {
+                        $isCompulsoryFeesPaid = $student->user->compulsory_fees->first(function ($compulsoryFeesPaid) use ($student) {
+                            return $compulsoryFeesPaid->type == 'Full Payment' && $compulsoryFeesPaid->student_id == $student->user->id;
+                        });
+                        $compulsoryFees['is_paid'] = $isCompulsoryFeesPaid ? true : false;
+                        return $compulsoryFees;
                     });
                 }
 
-                /** ---------- INSTALLMENTS ---------- */
-                if ($fee->installments->count()) {
-                    $totalPaid = 0;
+                // Set Installment Data in Response
+                if (count($fee->installments) > 0) {
+                    $totalFeesAmount = $fee->total_compulsory_fees;
+                    $totalInstallments = count($fee->installments);
+                    $paidInstallments = 0;
+                    $totalPaidAmount = 0;
 
+                    // First pass - identify paid installments
                     foreach ($fee->installments as $installment) {
-                        $paid = $student->user->compulsory_fees->first(function ($paid) use ($installment, $student) {
-                            return $paid->installment_id == $installment->id &&
-                                $paid->student_id == $student->user->id;
+                        $installmentPaid = $student->user->compulsory_fees->first(function ($compulsoryFeesPaid) use ($installment, $student) {
+                            return $compulsoryFeesPaid->type == "Installment Payment" && $compulsoryFeesPaid->installment_id == $installment->id && $compulsoryFeesPaid->student_id == $student->user->id;
                         });
 
-                        if ($paid) {
+                        if (!empty($installmentPaid)) {
+                            $paidInstallments++;
+                            $totalPaidAmount += $installmentPaid->amount;
                             $installment['is_paid'] = true;
-                            $installment['minimum_amount'] = $paid->amount;
-                            $installment['maximum_amount'] = $paid->amount;
-                            $installment['due_charges_amount'] = $paid->due_charges;
-                            $totalPaid += $paid->amount;
+                            $installment['minimum_amount'] = $installmentPaid->amount;
+                            $installment['maximum_amount'] = $installmentPaid->amount;
+                            $installment['due_charges_amount'] = $installmentPaid->due_charges;
                         } else {
                             $installment['is_paid'] = false;
-                            $installment['minimum_amount'] = $installment->installment_amount;
-                            $installment['maximum_amount'] = $installment->installment_amount;
-                            $installment['due_charges_amount'] = 0;
                         }
                     }
 
-                    $remaining = $fee->total_compulsory_fees - $totalPaid;
+                    // Calculate remaining amount and installments
+                    $remainingAmount = $totalFeesAmount - $totalPaidAmount;
+                    $remainingInstallments = $totalInstallments - $paidInstallments;
 
-                    foreach ($fee->installments as $installment) {
-                        if (!$installment['is_paid']) {
-                            $installment['maximum_amount'] = $remaining;
-                            break;
+                    // Second pass - handle unpaid installments
+                    if ($remainingInstallments > 0) {
+                        // Equal amount for first (n-1) unpaid installments
+                        $equalInstallmentAmount = 0;
+                        if ($remainingInstallments > 1) {
+                            $equalInstallmentAmount = $installment->installment_amount;
                         }
+
+                        $unpaidInstallmentsProcessed = 0;
+                        $amountDistributed = 0;
+
+                        foreach ($fee->installments as $index => $installment) {
+                            if ($installment['is_paid']) {
+                                continue; // Skip paid installments
+                            }
+
+                            $unpaidInstallmentsProcessed++;
+                            $installmentDueDateTimestamp = new DateTime($installment['due_date']);
+
+                            // For last unpaid installment, use remaining balance
+                            $installment['minimum_amount'] = $installment->installment_amount;
+
+                            if ($unpaidInstallmentsProcessed == $remainingInstallments) {
+                                $installment['maximum_amount'] = $remainingAmount;
+                            } else {
+                                $installment['maximum_amount'] = $remainingAmount - $amountDistributed;
+                                $amountDistributed += $installment->installment_amount;
+                            }
+
+                            // Calculate due charges if applicable
+                            if ($currentDateTimestamp > $installmentDueDateTimestamp) {
+                                if ($installment->due_charges_type == "percentage") {
+                                    $installment['due_charges_amount'] = ($installment['minimum_amount'] * $installment['due_charges']) / 100;
+                                } else if ($installment->due_charges_type == "fixed") {
+                                    $installment['due_charges_amount'] = $installment->due_charges;
+                                }
+                            } else {
+                                $installment['due_charges_amount'] = 0;
+                            }
+                        }
+                    }
+
+                    $previousInstallmentDate = new DateTime('now -1 day');
+                    // Third pass - identify current installment
+                    foreach ($fee->installments as $installment) {
+                        $installmentDueDateTimestamp = new DateTime($installment['due_date']);
+
+                        /* Current date should be less then the due date && greater than the due date of previous installments */
+                        /* In case of first installment, previous installment date will be current date - 1 */
+                        if ($currentDateTimestamp <= $installmentDueDateTimestamp && $currentDateTimestamp > $previousInstallmentDate) {
+                            $installment['is_current'] = true;
+                        } else {
+                            $installment['is_current'] = false;
+                        }
+                        $previousInstallmentDate = new DateTime($installment['due_date']);
                     }
                 }
             }
 
-            /** ---------------- RESPONSE ---------------- */
-            ResponseService::successResponse(
-                'Fees fetched successfully',
-                $fees
-            );
+            ResponseService::successResponse("Fees Fetched Successfully", $fees);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -1724,7 +1543,7 @@ class ParentApiController extends Controller
             $paymentConfigurations = $this->paymentConfigurations->builder()->where(['status' => 1, 'payment_method' => $request->payment_method])->first();
 
             if (empty($paymentConfigurations)) {
-                ResponseService::errorResponse('Payment is not Enabled', [], config('constants.RESPONSE_CODE.ENABLE_PAYMENT_GATEWAY'));
+                ResponseService::errorResponse("Payment is not Enabled", [], config('constants.RESPONSE_CODE.ENABLE_PAYMENT_GATEWAY'));
             }
 
             $parentId = Auth::user()->id;
@@ -1743,9 +1562,7 @@ class ParentApiController extends Controller
 
             $sessionYear = $this->cache->getDefaultSessionYear($schoolId);
 
-            $fees = $this
-                ->fees
-                ->builder()
+            $fees = $this->fees->builder()
                 ->where('id', $request->fees_id)
                 ->with([
                     'fees_class_type' => function ($q) {
@@ -1758,12 +1575,11 @@ class ParentApiController extends Controller
                     'fees_paid' => function ($query) use ($studentData) {
                         $query->where(['student_id' => $studentData->user_id])->with('compulsory_fee', 'optional_fee');
                     }
-                ])
-                ->firstOrFail();
+                ])->firstOrFail();
             $fees->append(['total_compulsory_fees']);
 
             if (!empty($fees->fees_paid) && !empty($fees->fees_paid->is_fully_paid)) {
-                ResponseService::errorResponse('Fees Already Paid', '', config('constants.RESPONSE_CODE.FEE_ALREADY_PAID'));
+                ResponseService::errorResponse("Fees Already Paid", "", config('constants.RESPONSE_CODE.FEE_ALREADY_PAID'));
             }
 
             // If installment id is not empty then user is going to pay in installment
@@ -1790,6 +1606,7 @@ class ParentApiController extends Controller
                     }
                 }
 
+
                 // Calculate amount per installment
                 $installmentAmount = $remainingAmount / $totalInstallments;
 
@@ -1800,9 +1617,9 @@ class ParentApiController extends Controller
 
                     // Calculate Due Charges amount if installment is overdue
                     if (new DateTime(date('Y-m-d')) > new DateTime($installment['due_date'])) {
-                        if ($installment->due_charges_type == 'percentage') {
+                        if ($installment->due_charges_type == "percentage") {
                             $dueChargesAmount = ($installmentAmount * $installment['due_charges']) / 100;
-                        } else if ($installment->due_charges_type == 'fixed') {
+                        } else if ($installment->due_charges_type == "fixed") {
                             $dueChargesAmount = $installment->due_charges;
                         }
                         $amount += $installmentAmount + $dueChargesAmount;
@@ -1820,8 +1637,9 @@ class ParentApiController extends Controller
                 }
 
                 if ($request->advance > $remainingAmount) {
-                    ResponseService::errorResponse('Advance Amount cannot be greater then : ' . $remainingAmount);
+                    ResponseService::errorResponse("Advance Amount cannot be greater then : " . $remainingAmount);
                 }
+
             } else {
                 /* Full Payment */
                 $dueChargesAmount = 0;
@@ -1840,7 +1658,7 @@ class ParentApiController extends Controller
                 $finalAmount = $amount;
             }
 
-            // Add Payment Data to Payment Transactions Table
+            //Add Payment Data to Payment Transactions Table
             $paymentTransactionData = $this->paymentTransaction->create([
                 'user_id' => $parentId,
                 'amount' => $finalAmount,
@@ -1867,21 +1685,21 @@ class ParentApiController extends Controller
                 'is_fully_paid' => $amount > $fees->total_compulsory_fees,
             ]);
 
-            if ($request->payment_method == 'Flutterwave' || $request->payment_method == 'Paystack') {
+            if ($request->payment_method == "Flutterwave" || $request->payment_method == "Paystack") {
                 $this->paymentTransaction->update($paymentTransactionData->id, ['order_id' => $paymentIntent['order_id'] ?? null, 'school_id' => $schoolId]);
                 $paymentTransactionData = $this->paymentTransaction->findById($paymentTransactionData->id);
                 DB::commit();
 
-                \Log::info('Payment Intent:', ['payment_intent' => $paymentIntent]);
+                \Log::info("Payment Intent:", ['payment_intent' => $paymentIntent]);
 
                 // Return only the payment_link for Flutterwave
-                if ($request->payment_method == 'Flutterwave') {
-                    ResponseService::successResponse('', [
-                        'payment_link' => $paymentIntent['payment_link']
+                if ($request->payment_method == "Flutterwave") {
+                    ResponseService::successResponse("", [
+                        "payment_link" => $paymentIntent['payment_link']
                     ]);
                 } else {
-                    ResponseService::successResponse('', [
-                        'payment_link' => $paymentIntent['data']['authorization_url']
+                    ResponseService::successResponse("", [
+                        "payment_link" => $paymentIntent['data']['authorization_url']
                     ]);
                 }
             } else {
@@ -1894,7 +1712,7 @@ class ParentApiController extends Controller
                     'payment_transaction_id' => $paymentTransactionData->id,
                 );
                 DB::commit();
-                ResponseService::successResponse('', ['payment_intent' => $paymentGatewayDetails, 'payment_transaction' => $paymentTransactionData]);
+                ResponseService::successResponse("", ["payment_intent" => $paymentGatewayDetails, "payment_transaction" => $paymentTransactionData]);
             }
         } catch (Throwable $e) {
             DB::rollBack();
@@ -1932,13 +1750,12 @@ class ParentApiController extends Controller
             $paymentConfigurations = $this->paymentConfigurations->builder()->where(['status' => 1, 'payment_method' => $request->payment_method])->first();
 
             if (empty($paymentConfigurations)) {
-                ResponseService::errorResponse('Payment is not Enabled', [], config('constants.RESPONSE_CODE.ENABLE_PAYMENT_GATEWAY'));
+                ResponseService::errorResponse("Payment is not Enabled", [], config('constants.RESPONSE_CODE.ENABLE_PAYMENT_GATEWAY'));
             }
 
+
             // Fees Data
-            $fees = $this
-                ->fees
-                ->builder()
+            $fees = $this->fees->builder()
                 ->where('id', $request->fees_id)
                 ->with([
                     'fees_class_type' => function ($q) use ($request) {
@@ -1948,20 +1765,19 @@ class ParentApiController extends Controller
                     'fees_paid' => function ($query) use ($studentData) {
                         $query->where(['student_id' => $studentData->user_id])->with('optional_fee');
                     }
-                ])
-                ->firstOrFail();
+                ])->firstOrFail();
 
             $optional_fees = $studentData->user->optional_fees()->whereIn('fees_class_id', $request->optional_id)->whereHas('fees_paid', function ($q) use ($request) {
                 $q->where('fees_id', $request->fees_id);
             })->get();
 
             if (count($optional_fees) > 0) {
-                ResponseService::errorResponse('Please select only unpaid fees');
+                ResponseService::errorResponse("Please select only unpaid fees");
             }
             $amount = $fees->total_optional_fees;
 
             if ($amount <= 0) {
-                ResponseService::errorResponse('No Optional Fees Found');
+                ResponseService::errorResponse("No Optional Fees Found");
             }
 
             $optional_fee = [];
@@ -1998,21 +1814,21 @@ class ParentApiController extends Controller
                 'mobile' => Auth::user()->mobile
             ]);
 
-            if ($request->payment_method == 'Flutterwave' || $request->payment_method == 'Paystack') {
+            if ($request->payment_method == "Flutterwave" || $request->payment_method == "Paystack") {
                 $this->paymentTransaction->update($paymentTransactionData->id, ['order_id' => $paymentIntent['order_id'] ?? null, 'school_id' => $schoolId]);
                 $paymentTransactionData = $this->paymentTransaction->findById($paymentTransactionData->id);
                 DB::commit();
 
-                \Log::info('Payment Intent:', ['payment_intent' => $paymentIntent]);
+                \Log::info("Payment Intent:", ['payment_intent' => $paymentIntent]);
 
                 // Return only the payment_link for Flutterwave
-                if ($request->payment_method == 'Flutterwave') {
-                    ResponseService::successResponse('', [
-                        'payment_link' => $paymentIntent['payment_link']
+                if ($request->payment_method == "Flutterwave") {
+                    ResponseService::successResponse("", [
+                        "payment_link" => $paymentIntent['payment_link']
                     ]);
                 } else {
-                    ResponseService::successResponse('', [
-                        'payment_link' => $paymentIntent['data']['authorization_url']
+                    ResponseService::successResponse("", [
+                        "payment_link" => $paymentIntent['data']['authorization_url']
                     ]);
                 }
             } else {
@@ -2025,7 +1841,7 @@ class ParentApiController extends Controller
                     'payment_transaction_id' => $paymentTransactionData->id,
                 );
                 DB::commit();
-                ResponseService::successResponse('', ['payment_intent' => $paymentGatewayDetails, 'payment_transaction' => $paymentTransactionData]);
+                ResponseService::successResponse("", ["payment_intent" => $paymentGatewayDetails, "payment_transaction" => $paymentTransactionData]);
             }
         } catch (Throwable $e) {
             DB::rollBack();
@@ -2053,10 +1869,7 @@ class ParentApiController extends Controller
             if (empty($student)) {
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
-            $feesPaid = $this
-                ->feesPaid
-                ->builder()
-                ->where(['fees_id' => $request->fees_id, 'student_id' => $student->user_id])
+            $feesPaid = $this->feesPaid->builder()->where(['fees_id' => $request->fees_id, 'student_id' => $student->user_id])
                 ->with([
                     'fees' => function ($q) {
                         $q->with('class:id,medium_id,name', 'class.medium', 'fees_class_type.fees_type');
@@ -2069,8 +1882,7 @@ class ParentApiController extends Controller
                             }
                         ]);
                     },
-                ])
-                ->first();
+                ])->first();
             $systemVerticalLogo = $this->systemSetting->builder()->where('name', 'vertical_logo')->first();
             $schoolVerticalLogo = $this->schoolSetting->builder()->where('name', 'vertical_logo')->first();
             $school = $this->cache->getSchoolSettings();
@@ -2138,7 +1950,7 @@ class ParentApiController extends Controller
         try {
             $child = $this->student->findById($request->child_id);
             $data = $this->sliders->builder()->where('school_id', $child->user->school_id)->get();
-            ResponseService::successResponse('Sliders Fetched Successfully', $data);
+            ResponseService::successResponse("Sliders Fetched Successfully", $data);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
@@ -2153,53 +1965,55 @@ class ParentApiController extends Controller
         return Auth::user();
     }
 
-    // add the transaction data in transaction table
-    //    public function completeFeeTransaction(Request $request) {
-    //        $validator = Validator::make($request->all(), [
-    //            'child_id'               => 'required',
-    //            'payment_transaction_id' => 'required',
-    //            'payment_id'             => 'required',
-    //            'payment_signature'      => 'required',
-    //        ]);
-    //        if ($validator->fails()) {
-    //            ResponseService::validationError($validator->errors()->first());
-    //        }
-    //        try {
-    //            DB::beginTransaction();
-    //            $child = $this->student->findById($request->child_id);
-    //            $this->paymentTransaction->update($request->payment_transaction_id, ['payment_id' => $request->payment_id, 'payment_signature' => $request->payment_signature, 'school_id' => $child->school_id]);
-    //            DB::commit();
-    //            ResponseService::successResponse("Data Updated Successfully");
-    //        } catch (Throwable $e) {
-    //            DB::rollBack();
-    //            ResponseService::logErrorResponse($e);
-    //            ResponseService::errorResponse();
-    //        }
-    //    }
 
-    // get the fees paid list
-    //    public function feesPaidList(Request $request) {
-    //        $validator = Validator::make($request->all(), [
-    //            'child_id'        => 'required',
-    //            'session_year_id' => 'nullable'
-    //        ]);
-    //
-    //        if ($validator->fails()) {
-    //            ResponseService::validationError($validator->errors()->first());
-    //        }
-    //        try {
-    //            $child = $this->student->findById($request->child_id);
-    //            $currentSessionYear = $this->cache->getDefaultSessionYear($child->user->school_id);
-    //            $sessionYearId = $request->session_year_id ?? $currentSessionYear->id;
-    //            $fees_paid = $this->feesPaid->builder()->where(['student_id' => $child->user_id, 'session_year_id' => $sessionYearId])->with('session_year:id,name', 'class.medium')->get();
-    //
-    //            ResponseService::successResponse("", $fees_paid);
-    //        } catch (Throwable $e) {
-    //            DB::rollBack();
-    //            ResponseService::logErrorResponse($e);
-    //            ResponseService::errorResponse();
-    //        }
-    //    }
+    // add the transaction data in transaction table
+//    public function completeFeeTransaction(Request $request) {
+//        $validator = Validator::make($request->all(), [
+//            'child_id'               => 'required',
+//            'payment_transaction_id' => 'required',
+//            'payment_id'             => 'required',
+//            'payment_signature'      => 'required',
+//        ]);
+//        if ($validator->fails()) {
+//            ResponseService::validationError($validator->errors()->first());
+//        }
+//        try {
+//            DB::beginTransaction();
+//            $child = $this->student->findById($request->child_id);
+//            $this->paymentTransaction->update($request->payment_transaction_id, ['payment_id' => $request->payment_id, 'payment_signature' => $request->payment_signature, 'school_id' => $child->school_id]);
+//            DB::commit();
+//            ResponseService::successResponse("Data Updated Successfully");
+//        } catch (Throwable $e) {
+//            DB::rollBack();
+//            ResponseService::logErrorResponse($e);
+//            ResponseService::errorResponse();
+//        }
+//    }
+
+    //get the fees paid list
+//    public function feesPaidList(Request $request) {
+//        $validator = Validator::make($request->all(), [
+//            'child_id'        => 'required',
+//            'session_year_id' => 'nullable'
+//        ]);
+//
+//        if ($validator->fails()) {
+//            ResponseService::validationError($validator->errors()->first());
+//        }
+//        try {
+//            $child = $this->student->findById($request->child_id);
+//            $currentSessionYear = $this->cache->getDefaultSessionYear($child->user->school_id);
+//            $sessionYearId = $request->session_year_id ?? $currentSessionYear->id;
+//            $fees_paid = $this->feesPaid->builder()->where(['student_id' => $child->user_id, 'session_year_id' => $sessionYearId])->with('session_year:id,name', 'class.medium')->get();
+//
+//            ResponseService::successResponse("", $fees_paid);
+//        } catch (Throwable $e) {
+//            DB::rollBack();
+//            ResponseService::logErrorResponse($e);
+//            ResponseService::errorResponse();
+//        }
+//    }
+
 
     // // Make Transaction Fail API
     // public function failPaymentTransactionStatus(Request $request){
@@ -2236,9 +2050,7 @@ class ParentApiController extends Controller
             //     return response()->json(['message' => 'Guardian record not found.'], 404);
             // }
 
-            $diaryStudents = $this
-                ->diaryStudent
-                ->builder()
+            $diaryStudents = $this->diaryStudent->builder()
                 ->where('student_id', $children->id)
                 ->with([
                     'diary' => function ($query) {
@@ -2247,12 +2059,13 @@ class ParentApiController extends Controller
                 ])
                 ->get();
 
-            ResponseService::successResponse('Student Diaries Fetched Successfully', $diaryStudents);
+            ResponseService::successResponse("Student Diaries Fetched Successfully", $diaryStudents);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
         }
     }
+
 
     public function showStudentDiaryDetail(Request $request)
     {
@@ -2273,9 +2086,7 @@ class ParentApiController extends Controller
                 ResponseService::errorResponse("Child's Account is not Active.Contact School Support", NULL, config('constants.RESPONSE_CODE.INACTIVE_CHILD'));
             }
 
-            $diaryStudents = $this
-                ->diaryStudent
-                ->builder()
+            $diaryStudents = $this->diaryStudent->builder()
                 ->where('id', $request->id)
                 ->where('student_id', $children->id)
                 ->with([
@@ -2285,7 +2096,7 @@ class ParentApiController extends Controller
                 ])
                 ->firstOrFail();
 
-            ResponseService::successResponse('Student Diary Fetched Successfully', $diaryStudents);
+            ResponseService::successResponse("Student Diary Fetched Successfully", $diaryStudents);
         } catch (Throwable $e) {
             ResponseService::logErrorResponse($e);
             ResponseService::errorResponse();
