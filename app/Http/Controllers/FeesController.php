@@ -1382,6 +1382,7 @@ class FeesController extends Controller
                         $this->sessionYearsTrackingsService->storeSessionYearsTracking('App\Models\CompulsoryFee', $feesPaidResult->id, Auth::user()->id, $sessionYear->id, Auth::user()->school_id, null);
                     }
                 } else {
+                    
                 }
             } else {
                 $compulsoryFeeData = array(
