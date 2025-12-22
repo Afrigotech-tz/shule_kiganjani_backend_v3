@@ -14,7 +14,7 @@ yarn-error.log
 
 # --- Storage Folder Management ---
 # We ignore the files inside, but NOT the folders themselves
-/storage/app/public/*
+#/storage/app/public/
 /storage/framework/cache/data/*
 /storage/framework/sessions/*
 /storage/framework/views/*
