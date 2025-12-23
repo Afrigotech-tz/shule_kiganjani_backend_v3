@@ -31,7 +31,7 @@ yarn-error.log
 
 # --- Public Assets ---
 # Ignore the symlink created by storage:link, but keep actual assets
-/public/storage
+#/public/storage
 /public/hot
 
 # --- Database & Keys ---

@@ -728,12 +728,10 @@ Route::group(['middleware' => ['Role', 'checkSchoolStatus', 'status','SwitchData
             Route::post('/generate-control-number', [FeeControllNumberController::class, 'generate'])->name('generate_control_number');
             // Route::post('/payment/ipn', [PaymentIpnController::class, 'payments'])->name('ipn-fees');
 
-
            
         });
 
         
-
         Route::resource('fees', FeesController::class);
 
 

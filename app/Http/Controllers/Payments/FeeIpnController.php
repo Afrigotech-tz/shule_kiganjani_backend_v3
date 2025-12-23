@@ -163,7 +163,12 @@ class FeeIpnController extends Controller
     {
         Log::info('RECEIVED FEES IPN DATA:', ['all_data' => $request->all()]);
 
-        $totalPaidSoFar = $request->amount_paid ?? 0;
+         $totalPaidSoFar = $request->add_amount ?? 0;
+ 
+
+        if ($totalPaidSoFar <= 200) {
+            return response()->json(['success' => false, 'message' => 'Amount too low.'], 200);
+        }
 
         // Multi-tenant database connection logic
         if ($request->school_code) {
@@ -225,6 +230,7 @@ class FeeIpnController extends Controller
                 'mode' => 3,  // Online
                 'advance' => 0
             ]);
+
 
             // Proceed to update the main fees ledger
             $this->payCompulsoryFeesStore($paymentRequest);
