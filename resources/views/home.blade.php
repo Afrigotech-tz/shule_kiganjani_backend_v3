@@ -240,7 +240,7 @@
 
                     </div>
                 </div>
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="row cardWrapper">
                         @foreach ($features as $key => $feature)
                             @if ($key < 9)
@@ -270,7 +270,53 @@
                                 value="1">{{ __('view_more_features') }}</button>
                         </div>
                     </div>
+                </div> --}}
+
+                <div class="col-12">
+                    <div class="row cardWrapper">
+                        @foreach ($features as $key => $feature)
+                            @if ($key < 9)
+                                <div class="col-sm-12 col-md-6 col-lg-4">
+                                    <div class="card h-100 p-3">
+                                        <div class="text-center mb-3">
+                                            <img src="{{ asset('assets/landing_page_images/features/' . $feature->name . '.svg') }}"
+                                                alt="{{ $feature->name }}" class="img-fluid" style="max-height:80px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">{{ __($feature->name) }}</h5>
+                                            <p class="card-text text-muted">
+                                                {{ $feature->descriptions }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="col-sm-12 col-md-6 col-lg-4 default-feature-list" style="display: none">
+                                    <div class="card h-100 p-3">
+                                        <div class="text-center mb-3">
+                                            <img src="{{ asset('assets/landing_page_images/features/' . $feature->name . '.svg') }}"
+                                                alt="{{ $feature->name }}" class="img-fluid" style="max-height:80px;">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title text-center">{{ __($feature->name) }}</h5>
+                                            <p class="card-text text-muted">
+                                                {{ $feature->descriptions }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+
+                        <div class="col-12 text-center mt-3">
+                            <button class="commonBtn view-more-feature" value="1">
+                                {{ __('view_more_features') }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
         </section>
         <!-- features ends here  -->
@@ -595,7 +641,6 @@
                 position: 'top-right',
                 bgColor: '#FE7C96'
             });
-            
         @endif
     </script>
 @endsection

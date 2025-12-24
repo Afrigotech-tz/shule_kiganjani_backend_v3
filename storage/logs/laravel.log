@@ -6234,3 +6234,31 @@
 #61 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('...')
 #62 {main}
 "} 
+[2025-12-24 11:11:51] local.ERROR: Out of memory (allocated 23068672 bytes) (tried to allocate 69632 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 23068672 bytes) (tried to allocate 69632 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\composer\\InstalledVersions.php:364)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:11:53] local.ERROR: Out of memory (allocated 14680064 bytes) (tried to allocate 32768 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 14680064 bytes) (tried to allocate 32768 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php:810)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:12:03] local.ERROR: Out of memory (allocated 16777216 bytes) (tried to allocate 8192 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 16777216 bytes) (tried to allocate 8192 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\nesbot\\carbon\\src\\Carbon\\CarbonPeriod.php:670)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:14:50] local.ERROR: Out of memory (allocated 27262976 bytes) (tried to allocate 32768 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 27262976 bytes) (tried to allocate 32768 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\CastMakeCommand.php:1)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:18:50] local.ERROR: Out of memory (allocated 12582912 bytes) (tried to allocate 20480 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 12582912 bytes) (tried to allocate 20480 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\http-foundation\\Request.php:1630)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:21:50] local.ERROR: Out of memory (allocated 12582912 bytes) (tried to allocate 20480 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 12582912 bytes) (tried to allocate 20480 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\http-foundation\\Request.php:1630)
+[stacktrace]
+#0 {main}
+"} 
+[2025-12-24 11:23:51] local.ERROR: Out of memory (allocated 16777216 bytes) (tried to allocate 8192 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Out of memory (allocated 16777216 bytes) (tried to allocate 8192 bytes) at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\translation-contracts\\TranslatorTrait.php:215)
+[stacktrace]
+#0 {main}
+"} 

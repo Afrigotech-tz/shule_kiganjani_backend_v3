@@ -160,11 +160,12 @@ class Controller extends BaseController
         }
 
         if ($this->isSchoolWebsiteRequest()) {
-            // $features = Feature::activeFeatures()->get();
-            $features = Feature::activeFeatures()
-                ->whereIn('id', [1, 2, 20, 21])
-                ->get();
+             $features = Feature::activeFeatures()->get();
+            // $features = Feature::activeFeatures()
+            //     ->whereIn('id', [1, 2, 20, 21])
+            //     ->get();
 
+            
             $settings = app(CachingService::class)->getSystemSettings();
             $schoolSettings = SchoolSetting::where('name', 'horizontal_logo')->get();
 
