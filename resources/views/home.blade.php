@@ -272,7 +272,7 @@
                     </div>
                 </div> --}}
 
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="row cardWrapper">
                         @foreach ($features as $key => $feature)
                             @if ($key < 9)
@@ -314,8 +314,43 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
+
+                <div class="col-12">
+                    <div class="row cardWrapper">
+                        @foreach ($features as $key => $feature)
+                            <div class="col-sm-12 col-md-6 col-lg-4 {{ $key >= 9 ? 'default-feature-list' : '' }}"
+                                @if ($key >= 9) style="display:none" @endif>
+                                <div class="card h-100 p-3" role="button" data-bs-toggle="collapse"
+                                    data-bs-target="#featureDesc{{ $feature->id }}" aria-expanded="false"
+                                    aria-controls="featureDesc{{ $feature->id }}">
+
+                                    <div class="text-center mb-3">
+                                        <img src="{{ asset('assets/landing_page_images/features/' . $feature->name . '.svg') }}"
+                                            alt="{{ $feature->name }}" class="img-fluid" style="max-height:80px;">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center">{{ __($feature->name) }}</h5>
+
+                                        <!-- Hidden description INSIDE the card -->
+                                        <div class="collapse mt-2" id="featureDesc{{ $feature->id }}">
+                                            <p class="card-text text-muted">
+                                                {{ $feature->descriptions }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <div class="col-12 text-center mt-3">
+                            <button class="commonBtn view-more-feature" value="1">
+                                {{ __('view_more_features') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </section>
