@@ -18,15 +18,17 @@ use App\Models\Slider;
 use App\Models\Stream;
 use App\Models\Students;
 use App\Models\User;
+use App\Repositories\ContactInquiry\ContactInquiryInterface;
 use App\Repositories\ExtraFormField\ExtraFormFieldsInterface;
+use App\Repositories\FormField\FormFieldsInterface;
 use App\Repositories\Guidance\GuidanceInterface;
 use App\Repositories\SystemSetting\SystemSettingInterface;
 use App\Services\CachingService;
+use App\Services\FeaturesService;
 use App\Services\GeneralFunctionService;
 use App\Services\ResponseService;
 use App\Services\SubscriptionService;
 use App\Services\UploadService;
-use App\Services\FeaturesService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -38,16 +40,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Str;
 use Throwable;
-use App\Repositories\FormField\FormFieldsInterface;
-use App\Repositories\ContactInquiry\ContactInquiryInterface;
-
 
 class Controller extends BaseController
 {
@@ -84,8 +83,6 @@ class Controller extends BaseController
 
     public function index()
     {
-
-
         $connection = DB::getDefaultConnection();
         if ($connection == 'school' && Auth::user()) {
             return redirect('/dashboard');
@@ -104,7 +101,7 @@ class Controller extends BaseController
         $currentDatabaseName = DB::connection()->getDatabaseName();
         // School website
         $fullDomain = $_SERVER['HTTP_HOST'];
-        $fullDomain = str_replace("www.", "", $fullDomain);
+        $fullDomain = str_replace('www.', '', $fullDomain);
         $parts = explode('.', $fullDomain);
         $subdomain = $parts[0];
         $school = '';
@@ -118,7 +115,7 @@ class Controller extends BaseController
                 $baseUrl = url('/');
                 $baseUrlParts = parse_url($baseUrl);
                 $host = $baseUrlParts['host'];
-                $host = str_replace("www.", "", $host);
+                $host = str_replace('www.', '', $host);
                 $hostParts = explode('.', $host);
                 $isDemoSchool = 1;
 
@@ -141,13 +138,11 @@ class Controller extends BaseController
                 }
             }
         } catch (\Throwable $th) {
-
         }
 
         try {
             $school = School::on('mysql')->where('domain', $fullDomain)->orwhere('domain', $subdomain)->where('installed', 1)->first();
         } catch (\Throwable $th) {
-
         }
 
         if ($school) {
@@ -162,17 +157,19 @@ class Controller extends BaseController
                     return $this->school_website($school);
                 }
             }
-
         }
 
         if ($this->isSchoolWebsiteRequest()) {
-            $features = Feature::activeFeatures()->get();
+            // $features = Feature::activeFeatures()->get();
+            $features = Feature::activeFeatures()
+                ->whereIn('id', [1, 2, 20, 21])
+                ->get();
 
             $settings = app(CachingService::class)->getSystemSettings();
             $schoolSettings = SchoolSetting::where('name', 'horizontal_logo')->get();
 
             $about_us_lists = $settings['about_us_points'] ?? 'Affordable price, Easy to manage admin panel, Data Security';
-            $about_us_lists = explode(",", $about_us_lists);
+            $about_us_lists = explode(',', $about_us_lists);
             $faqs = Faq::where('school_id', null)->get();
             $featureSections = FeatureSection::with('feature_section_list')->orderBy('rank', 'ASC')->get();
             $guidances = $this->guidance->builder()->get();
@@ -193,7 +190,6 @@ class Controller extends BaseController
                 $student = 0;
                 $teacher = 0;
             }
-
 
             $counter = [
                 'school' => $school,
@@ -233,7 +229,6 @@ class Controller extends BaseController
 
     public function school_website($school)
     {
-
         Config::set('database.connections.school.database', $school->database_name);
         DB::purge('school');
         DB::connection('school')->reconnect();
@@ -297,8 +292,7 @@ class Controller extends BaseController
         // Check if the host is the same as the app URL host
         if ($host === $appUrlHost) {
             return true;
-        }
-        ;
+        };
 
         if ($isLocal) {
             return true;
@@ -306,8 +300,6 @@ class Controller extends BaseController
 
         return false;
     }
-
-
 
     public function contact(Request $request)
     {
@@ -343,17 +335,14 @@ class Controller extends BaseController
             });
 
             ResponseService::successResponse('Message send successfully');
-
         } catch (Throwable $e) {
             dd($e);
             if (Str::contains($e->getMessage(), ['Failed', 'Mail', 'Mailer', 'MailManager'])) {
-                ResponseService::warningResponse("Data stored successfully. But Email not sent.");
+                ResponseService::warningResponse('Data stored successfully. But Email not sent.');
             } else {
                 ResponseService::errorResponse('Apologies for the Inconvenience: Please Try Again Later');
             }
         }
-
-
     }
 
     public function cron_job()
@@ -365,13 +354,13 @@ class Controller extends BaseController
     {
         $databaseName = config('database.connections.mysql.database');
 
-        //Fetch all the tables in which current table's id used as foreign key
-        $relatedTables = DB::select("SELECT TABLE_NAME,COLUMN_NAME
+        // Fetch all the tables in which current table's id used as foreign key
+        $relatedTables = DB::select('SELECT TABLE_NAME,COLUMN_NAME
             FROM information_schema.KEY_COLUMN_USAGE
-            WHERE REFERENCED_TABLE_NAME = ? AND TABLE_SCHEMA = ?", [$table, $databaseName]);
+            WHERE REFERENCED_TABLE_NAME = ? AND TABLE_SCHEMA = ?', [$table, $databaseName]);
         $data = [];
         foreach ($relatedTables as $relatedTable) {
-            $q = DB::table($relatedTable->TABLE_NAME)->where($relatedTable->TABLE_NAME . "." . $relatedTable->COLUMN_NAME, $id);
+            $q = DB::table($relatedTable->TABLE_NAME)->where($relatedTable->TABLE_NAME . '.' . $relatedTable->COLUMN_NAME, $id);
             $data[$relatedTable->TABLE_NAME] = $this->buildRelatedJoinStatement($q, $relatedTable->TABLE_NAME)->get()->toArray();
         }
 
@@ -384,29 +373,28 @@ class Controller extends BaseController
     private function buildSelectStatement($query, $table)
     {
         $select = [
-            "classes" => "classes.*,CONCAT(classes.name,'(',mediums.name,')') as name,streams.name as stream_name,shifts.name as shift_name",
-            "class_sections" => "class_sections.*,CONCAT(classes.name,' ',sections.name,'(',mediums.name,')') as class_section",
-            "users" => "users.first_name,users.last_name",
+            'classes' => "classes.*,CONCAT(classes.name,'(',mediums.name,')') as name,streams.name as stream_name,shifts.name as shift_name",
+            'class_sections' => "class_sections.*,CONCAT(classes.name,' ',sections.name,'(',mediums.name,')') as class_section",
+            'users' => 'users.first_name,users.last_name',
             //            "student_subjects" => "student_subjects.*,CONCAT(users.first_name,' ',users.last_name) as student,"
         ];
-        return $query->select(DB::raw($select[$table] ?? "*," . $table . ".id as id"));
+        return $query->select(DB::raw($select[$table] ?? '*,' . $table . '.id as id'));
     }
-
 
     private function buildRelatedJoinStatement($query, $table)
     {
         $databaseName = config('database.connections.mysql.database');
         // If all the child tables further have foreign keys than fetch that table also
-        $getTableSchema = DB::select("SELECT CONSTRAINT_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+        $getTableSchema = DB::select('SELECT CONSTRAINT_NAME, COLUMN_NAME, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
             FROM information_schema.KEY_COLUMN_USAGE
-            WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ? AND REFERENCED_TABLE_NAME IS NOT NULL", [$table, $databaseName]);
+            WHERE TABLE_NAME = ? AND TABLE_SCHEMA = ? AND REFERENCED_TABLE_NAME IS NOT NULL', [$table, $databaseName]);
 
         $tableAlias = [];
-        //Build Join query for all the foreign key using the Table Schema
+        // Build Join query for all the foreign key using the Table Schema
         foreach ($getTableSchema as $foreignKey) {
-            //, 'edited_by', 'created_by', 'guardian_id'
+            // , 'edited_by', 'created_by', 'guardian_id'
             if ($foreignKey->REFERENCED_TABLE_NAME == $table) {
-                //If Related table has foreign key of the same table then no need to add that in join to reduce the query load
+                // If Related table has foreign key of the same table then no need to add that in join to reduce the query load
                 continue;
             }
 
@@ -420,7 +408,7 @@ class Controller extends BaseController
             $tableAlias[] = $foreignKey->REFERENCED_TABLE_NAME;
 
             if (!in_array($foreignKey->COLUMN_NAME, ['school_id', 'session_year_id'])) {
-                $query->leftJoin($foreignKey->REFERENCED_TABLE_NAME . " as " . $currentAlias, $foreignKey->REFERENCED_TABLE_NAME . "." . $foreignKey->REFERENCED_COLUMN_NAME, '=', $table . "." . $foreignKey->COLUMN_NAME);
+                $query->leftJoin($foreignKey->REFERENCED_TABLE_NAME . ' as ' . $currentAlias, $foreignKey->REFERENCED_TABLE_NAME . '.' . $foreignKey->REFERENCED_COLUMN_NAME, '=', $table . '.' . $foreignKey->COLUMN_NAME);
             }
         }
 
@@ -431,12 +419,11 @@ class Controller extends BaseController
     {
         try {
             DB::table($table)->where('id', $id)->delete();
-            ResponseService::successResponse("Data Deleted Permanently");
+            ResponseService::successResponse('Data Deleted Permanently');
         } catch (Throwable $e) {
-            ResponseService::logErrorResponse($e, "Controller -> relatedDataDestroy Method", 'cannot_delete_because_data_is_associated_with_other_data');
+            ResponseService::logErrorResponse($e, 'Controller -> relatedDataDestroy Method', 'cannot_delete_because_data_is_associated_with_other_data');
             ResponseService::errorResponse();
         }
-
     }
 
     public function about_us()
@@ -446,7 +433,6 @@ class Controller extends BaseController
 
     public function contact_us()
     {
-
         $status = $this->checkPageStatus('contact_us_status');
 
         if ($status['status'] == 0) {
@@ -485,8 +471,6 @@ class Controller extends BaseController
 
     public function contact_form(Request $request)
     {
-
-
         $fullDomain = $_SERVER['HTTP_HOST'];
         $parts = explode('.', $fullDomain);
         $subdomain = $parts[0];
@@ -521,16 +505,14 @@ class Controller extends BaseController
             ];
 
             try {
-
                 Config::set('database.connections.school.database', $school->database_name);
                 DB::purge('school');
                 DB::connection('school')->reconnect();
                 DB::setDefaultConnection('school');
 
                 $this->contactInquiry->create($request->only(['name', 'email', 'subject', 'message']));
-
             } catch (Throwable $e) {
-                ResponseService::logErrorResponse($e, "Contact Form Controller -> contact_form Method");
+                ResponseService::logErrorResponse($e, 'Contact Form Controller -> contact_form Method');
             }
 
             Mail::send('contact', $data, static function ($message) use ($data) {
@@ -540,7 +522,7 @@ class Controller extends BaseController
             ResponseService::successResponse('Your message has been sent successfully. We will get back to you soon.');
         } catch (Throwable $e) {
             if (Str::contains($e->getMessage(), ['Failed', 'Mail', 'Mailer', 'MailManager'])) {
-                ResponseService::warningResponse("Data stored successfully. But Email not sent.");
+                ResponseService::warningResponse('Data stored successfully. But Email not sent.');
             } else {
                 ResponseService::errorResponse('Apologies for the Inconvenience: Please Try Again Later');
             }
@@ -549,7 +531,6 @@ class Controller extends BaseController
 
     public function photo()
     {
-
         $status = $this->checkPageStatus('gallery_status');
 
         if ($status['status'] == 0) {
@@ -562,7 +543,6 @@ class Controller extends BaseController
     public function photo_file($id)
     {
         try {
-
             $status = $this->checkPageStatus('gallery_status');
 
             if ($status['status'] == 0) {
@@ -625,7 +605,6 @@ class Controller extends BaseController
     public function systemLinks($type = null)
     {
         if ($type) {
-
             $faqs = Faq::where('school_id', null)->get();
             $guidances = $this->guidance->builder()->get();
             $languages = Language::get();
@@ -666,6 +645,7 @@ class Controller extends BaseController
         } else {
             $extraFields = $this->formFields->defaultModel()->orderBy('rank')->get();
         }
+
         return view('school-website.admission', compact('classes', 'extraFields'));
     }
 
@@ -692,7 +672,7 @@ class Controller extends BaseController
             'image' => 'nullable|mimes:jpeg,png,jpg,svg|image|max:2048',
             'dob' => 'required',
             'class_id' => 'required|numeric',
-            /*NOTE : Unique constraint is used because it's not school specific*/
+            /* NOTE : Unique constraint is used because it's not school specific */
             'guardian_email' => 'required|email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             'guardian_first_name' => 'required|string',
             'guardian_last_name' => 'required|string',
@@ -732,7 +712,6 @@ class Controller extends BaseController
         }
 
         $request->validate($rules, $messages);
-
 
         try {
             DB::beginTransaction();
@@ -777,7 +756,7 @@ class Controller extends BaseController
                 $q->where('name', '!=', 'Guardian');
             })->where('email', $request->guardian_email)->withTrashed()->first();
             if ($guardianUser) {
-                ResponseService::errorResponse("Email ID is already taken for Other Role");
+                ResponseService::errorResponse('Email ID is already taken for Other Role');
             }
 
             $password = $this->makeParentPassword($request->guardian_mobile);
@@ -790,7 +769,7 @@ class Controller extends BaseController
                 'school_id' => $school->id
             );
 
-            //NOTE : This line will return the old values if the user is already exists
+            // NOTE : This line will return the old values if the user is already exists
             $parentUser = User::where('email', $request->guardian_email)->first();
             if (!empty($request->guardian_image)) {
                 $parent['image'] = UploadService::upload($request->guardian_image, 'guardian');
@@ -814,7 +793,7 @@ class Controller extends BaseController
                 $image = UploadService::upload($request->image, 'user');
             }
             $password = $this->makeStudentPassword($request->dob);
-            //Create Student User First
+            // Create Student User First
             $user = User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -840,7 +819,7 @@ class Controller extends BaseController
                 'guardian_id' => $parentUser->id,
                 'session_year_id' => $sessionYearId,
                 'class_id' => $request->class_id ?? null,
-                'application_type' => "online",
+                'application_type' => 'online',
                 'application_status' => 0,
                 'school_id' => $school->id,
             ]);
@@ -866,7 +845,7 @@ class Controller extends BaseController
             ResponseService::successResponse('Student Registered successfully');
         } catch (Throwable $e) {
             DB::rollBack();
-            ResponseService::logErrorResponse($e, "Student Controller -> Store method");
+            ResponseService::logErrorResponse($e, 'Student Controller -> Store method');
             ResponseService::errorResponse();
         }
     }
@@ -893,7 +872,7 @@ class Controller extends BaseController
                     $user->sendEmailVerificationNotification();
 
                     // Update the `updated_at` timestamp to the current time
-                    $user->touch(); // This will update the `updated_at` timestamp
+                    $user->touch();  // This will update the `updated_at` timestamp
                     Auth::logout();
                     return redirect()->route('login')->with('emailSuccess', 'A verification email has been sent to your email address. Please check your inbox.');
                 } else {
@@ -910,7 +889,6 @@ class Controller extends BaseController
             Auth::logout();
             return redirect()->route('login')->with('error', trans('An error occurred Please try again later'));
         }
-
     }
 
     public function cacheFlush()

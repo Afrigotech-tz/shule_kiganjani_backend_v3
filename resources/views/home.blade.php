@@ -327,11 +327,11 @@
                     <div class="listWrapper">
                         <span>
                             <i class="fa-regular fa-circle-check"></i>
-                            {{__('data_security')}}
+                            {{ __('data_security') }}
                         </span>
                         <span>
-                             <i class="fa-regular fa-circle-check"></i>
-                            {{__('easy_to_manage_panel')}}
+                            <i class="fa-regular fa-circle-check"></i>
+                            {{ __('easy_to_manage_panel') }}
                         </span>
 
                     </div>
@@ -484,7 +484,7 @@
                         <span class="title">{{ __('download_our_app_now') }}</span>
                         <span>
                             {{-- {{ $settings['download_our_app_description'] ?? '' }} --}}
-                            {{__('download_our_app_description')}}
+                            {{ __('download_our_app_description') }}
                         </span>
                     </div>
                     <div class="storeImgs">
@@ -526,18 +526,20 @@
                     });
 
                     contents[tabNumber - 1].classList.add('active');
+
                 }
 
                 tabs.forEach((tab, index) => {
                     tab.addEventListener('click', (event) => {
                         switchTab(event, index + 1);
                     });
+
                 });
 
                 setTimeout(() => {
                     tabs[0].click();
                 }, 1000);
-                
+
             });
 
             document.addEventListener('DOMContentLoaded', () => {
@@ -556,7 +558,9 @@
                     });
 
                     contents[tabNumber - 1].classList.add('active');
+
                 }
+
 
                 tabs.forEach((tab, index) => {
                     tab.addEventListener('click', (event) => {
@@ -591,6 +595,7 @@
                 position: 'top-right',
                 bgColor: '#FE7C96'
             });
+            
         @endif
     </script>
 @endsection
