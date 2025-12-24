@@ -6262,3 +6262,33 @@
 [stacktrace]
 #0 {main}
 "} 
+[2025-12-25 00:25:06] local.ERROR: Command "migrate:satus" is not defined.
+
+Did you mean one of these?
+    migrate
+    migrate:fresh
+    migrate:install
+    migrate:refresh
+    migrate:reset
+    migrate:rollback
+    migrate:school
+    migrate:school:rollback
+    migrate:status {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"migrate:satus\" is not defined.
+
+Did you mean one of these?
+    migrate
+    migrate:fresh
+    migrate:install
+    migrate:refresh
+    migrate:reset
+    migrate:rollback
+    migrate:school
+    migrate:school:rollback
+    migrate:status at D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php:737)
+[stacktrace]
+#0 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(266): Symfony\\Component\\Console\\Application->find()
+#1 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun()
+#2 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run()
+#3 D:\\AFRIGOTECH\\SHULE ORIGINAL\\shule_kiganjani_latest\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle()
+#4 {main}
+"} 
