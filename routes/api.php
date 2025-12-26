@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\StaffApiController;
 use App\Http\Controllers\Api\StudentApiController;
 use App\Http\Controllers\Api\TeacherApiController;
 use App\Http\Controllers\Api\TrasportationApiController;
+use App\Http\Controllers\Payments\FeeControllnumberController;
 use App\Http\Controllers\SubscriptionWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,9 @@ Route::get('fees-due-notification',[ApiController::class, 'sendFeeNotification']
  * STUDENT APIs
  **/
 Route::group(['prefix' => 'student'], static function () {
+    
+    // student generate control number 
+    Route::post('generate-control-number', [FeeControllnumberController::class, 'generate'])->name('generate_control_number');
 
     //Non Authenticated APIs
     Route::post('login', [StudentApiController::class, 'login']);
