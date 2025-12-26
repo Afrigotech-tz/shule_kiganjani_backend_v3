@@ -336,7 +336,7 @@
                                         <!-- Hidden description INSIDE the card -->
                                         <div class="collapse mt-2" id="featureDesc{{ $feature->id }}">
                                             <p class="card-text text-muted">
-                                                {{ $feature->descriptions }}
+                                                {{ __($feature->descriptions) }}
                                             </p>
                                         </div>
                                     </div>
