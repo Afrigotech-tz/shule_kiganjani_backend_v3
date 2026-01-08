@@ -13,27 +13,39 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+      shell: bash
+
     - name: Deploy to VPS
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22
         script: |
           cd /var/www/shulekiganjani/shule_kiganjani_backend_v3
-          git pull
 
+          # Pull latest changes
           git fetch origin
           git reset --hard origin/main
 
+          # Install PHP dependencies
           composer install --no-dev --optimize-autoloader
 
+          # Run Laravel migrations & clear caches
           php artisan migrate --force
-          php artisan optimize:clear
-          php artisan config:cache
+          php artisan config:clear
+          php artisan cache:clear
           php artisan route:cache
           php artisan view:clear
+          php artisan config:cache
 
+          # Restart services
           sudo systemctl reload php8.4-fpm
           sudo systemctl reload nginx
-
