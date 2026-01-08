@@ -20,7 +20,8 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd ${{ secrets.VPS_PATH }}
+          cd /var/www/shulekiganjani/shule_kiganjani_backend_v3
+          git pull
 
           git fetch origin
           git reset --hard origin/main
