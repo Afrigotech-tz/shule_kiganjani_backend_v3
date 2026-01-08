@@ -1440,14 +1440,6 @@
             </li>
         @endcanany
 
-        @if (Auth::user()->hasRole(['Super Admin']))
-            <li class="nav-item">
-                <a class="nav-link" href="https://afrigotech-in.github.io/eSchool-SaaS-Doc/" target="_blank">
-                    <i class="fa fa-book menu-icon"></i>
-                    <span class="menu-title">{{ __('Documentation') }}</span>
-                </a>
-            </li>
-        @endif
         @if (Auth::user()->hasRole(['Super Admin', 'School Admin']) || Auth::user()->hasPermissionTo('database-backup'))
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('database-backup.index') }}">
