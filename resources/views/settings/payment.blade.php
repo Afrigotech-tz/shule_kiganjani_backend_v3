@@ -42,26 +42,6 @@
             $('#currency_code').trigger("change");
         }, 500);
 
-        @if (!empty($paymentGateway['Stripe']['currency_code']))
-            $('#currency_code').val("{{ $settings['currency_code'] }}").trigger("change");
-        @endif
-
-        $('#currency_code').on('change', function() {
-            $('#stripe_currency').val($(this).val());
-        })
-
-        $('#currency_code').on('change', function() {
-            $('#razorpay_currency').val($(this).val());
-        })
-
-        $('#currency_code').on('change', function() {
-            $('#flutterwave_currency').val($(this).val());
-        })
-
-        $('#currency_code').on('change', function() {
-            $('#paystack_currency').val($(this).val());
-        })
-
         $('#currency_code').on('change', function() {
             $('#bank_transfer_currency').val($(this).val());
         })
